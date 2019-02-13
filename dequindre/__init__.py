@@ -44,8 +44,19 @@ class Task:
 
     def __hash__(self):
         """md5 is fast, and chances of colision are really low"""
-        big_int = int(md5(self.loc.encode()).hexdigest(), 16)
+        loc = self.loc
+        stage = str(self.stage)
+        env = self.env
+        hash_str = '-'.join((loc, stage, env))
+        big_int = int(md5(hash_str.encode()).hexdigest(), 16)
+        
         return big_int
+    
+
+    def __eq__(self, other: 'Task') -> bool:
+        if not isinstance(other, type(self)):
+            return False
+        return hash(self) == hash(other)
 
 
     def __lt__(self, other: 'Task') -> bool:
@@ -156,6 +167,38 @@ class DAG:
 
         return None
 
+
+    def add_dependency(self, task: Task, depends_on: Task):
+        """Add dependency to DAG
+        
+        Examples:
+        >>> dag.add_dependency(steep_tea, depends_on=boil_water)
+        """
+        # error handling by add_tasks won't be clear to the user.
+        assert isinstance(task, Task), TypeError('start is not a dequindre Task')
+        assert isinstance(depends_on, Task), TypeError('end is not a dequindre Task')
+
+        self.add_tasks([task, depends_on])
+        self.dedges[depends_on].add(task)
+
+        return None
+    
+    
+    def add_dependencies(self, d: Dict[Task, Set[Task]]):
+        """Add dependencies to DAG
+        
+        Examples:
+        >>> dag.add_dependencies({steep_tea: {boil_water, get_tea_leaves}})
+        """
+        for task, dependencies in d.items():
+            if isinstance(dependencies, Task):
+                dependency = dependencies 
+                self.add_dependency(task, dependency)
+                continue
+            elif isinstance(dependencies, set):
+                for dependency in dependencies:
+                    self.add_dependency(task, dependency)
+
     # ------------------------------------------------------------------------
     # Graph Utilities
     # ------------------------------------------------------------------------
@@ -253,11 +296,8 @@ class Dequindre:
     TODO: Define exception for when cycles are detected
     """
     def __init__(self, dag: DAG, activate_env_cmd: str):
-        if dag.is_cyclic():
-            raise Exception('Cyclic DAG detected')
-
         assert isinstance(activate_env_cmd, str), 'activate_env_cmd must be a str'
-
+        assert len(activate_env_cmd) > 0, 'activate_env_cmd must not be an empty str'
         self.activate_env_cmd = activate_env_cmd
 
         self.original_dag = dag
@@ -284,8 +324,8 @@ class Dequindre:
                 drink_tea: 3
             }
         """
-        assert isinstance(max_stage, int), TypeError('max_stage must be an int')
-        assert max_stage > 1, ValueError('max_stage must be greater than 1')
+        assert isinstance(max_stage, int), 'max_stage must be an int'
+        assert max_stage > 1, 'max_stage must be greater than 1'
         
         dag = self.dag  # copy to something easier to read
 
