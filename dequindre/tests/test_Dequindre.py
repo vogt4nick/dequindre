@@ -1,5 +1,5 @@
-"""Unit tests for the Dequindre class.
-"""
+"""Unit tests for the Dequindre class."""
+
 from collections import defaultdict
 
 import pytest
