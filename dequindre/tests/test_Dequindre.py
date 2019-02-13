@@ -7,7 +7,7 @@ import pytest
 from dequindre import Task, DAG, Dequindre
 
 
-# test __init__
+@pytest.mark.run(order=1)
 def test__Dequindre_init_exceptions():
     """Raise expected exceptions
     """
@@ -33,6 +33,7 @@ def test__Dequindre_init_exceptions():
     return None
 
 
+@pytest.mark.run(order=2)
 def test__Dequindre_init():
     """Nothing should break here
     """
@@ -68,7 +69,6 @@ def test__Dequindre_refresh_dag():
         assert t == nt
 
 
-# test get_task_priorities
 def test__Dequindre_get_task_priorities():
     A = Task('A.py', 1, 'test-env')
     dag = DAG()
@@ -105,7 +105,6 @@ def test__Dequindre_get_task_priorities():
     }
 
 
-# test get_priorities
 def test__Dequindre_get_priorities_exceptions():
     A = Task('A.py', 1, 'test-env')
     dag = DAG()

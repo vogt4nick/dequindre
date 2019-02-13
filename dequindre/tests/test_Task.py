@@ -4,6 +4,7 @@ import pytest
 from dequindre import Task
 
 
+@pytest.mark.run(order=1)
 def test__Task_init():
     good_loc = 'path/to/file.py'
     good_stage = 1
@@ -33,3 +34,26 @@ def test__Task_init():
 
     with pytest.raises(AssertionError):
         Task(loc=good_loc, stage=good_stage, env='')
+
+
+def test__Task_hash():
+    A = Task('test.py', 1, 'test-env')
+    B = Task('test.py', 1, 'test-env')
+
+    assert hash(A) == hash(B)
+
+    A.loc = 'new-test.py'
+
+    assert hash(A) != hash(B)
+
+
+def test__Task_eq():
+    A = Task('test.py', 1, 'test-env')
+    B = Task('test.py', 1, 'test-env')
+
+    assert A == B
+
+    A.loc = 'new-test.py'
+
+    assert A != B
+
