@@ -1,3 +1,4 @@
+"""Unit tests for the DAG class."""
 
 import pytest
 
@@ -7,6 +8,7 @@ from dequindre import Task, DAG
 # Helper Functions
 # ----------------------------------------------------------------------------
 
+@pytest.mark.run(order=2)
 def get_two_tasks():
     return (
         Task('A.py', stage=1, env='test-env'),
@@ -14,6 +16,7 @@ def get_two_tasks():
     )
 
 
+@pytest.mark.run(order=2)
 def get_cyclic_graph():
     A = Task('A.py', stage=1, env='test-env')
     B = Task('B.py', stage=1, env='test-env')
@@ -31,14 +34,14 @@ def get_cyclic_graph():
 # ----------------------------------------------------------------------------
 # DAG.__init__
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_init():
     assert isinstance(DAG(), DAG), 'DAG init failed'
 
 # ----------------------------------------------------------------------------
 # DAG.tasks
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_add_task():
     A, B = get_two_tasks()
 
@@ -48,6 +51,7 @@ def test__DAG_add_task():
     assert dag.tasks == {A,}, 'Test Task was not added to the DAG'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_add_tasks():
     A, B = get_two_tasks()
 
@@ -57,6 +61,7 @@ def test__DAG_add_tasks():
     assert dag.tasks == {A,B}, 'Test Tasks were not added to the DAG'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_remove_task():
     A, B = get_two_tasks()
 
@@ -69,7 +74,7 @@ def test__DAG_remove_task():
 # ----------------------------------------------------------------------------
 # DAG.dedges
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_add_dedge():
     A, B = get_two_tasks()
 
@@ -84,6 +89,7 @@ def test__DAG_add_dedge():
     assert dag.dedges == {A: {B,}}, 'dedge Tasks were not added to DAG.tasks'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_dedges():
     A, B = get_two_tasks()
     dag = DAG()
@@ -93,7 +99,7 @@ def test__DAG_dedges():
 # ----------------------------------------------------------------------------
 # methods
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_get_downstream():
     A, B = get_two_tasks()
     dag = DAG()
@@ -103,6 +109,7 @@ def test__DAG_get_downstream():
     assert dag.get_downstream() == {A: {B,}}, 'Task B is not downstream'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_get_upstream():
     A, B = get_two_tasks()
     dag = DAG()
@@ -112,6 +119,7 @@ def test__DAG_get_upstream():
     assert dag.get_upstream() == {B: {A,}}, 'Task A is not upstream'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_get_sources():
     A, B = get_two_tasks()
     dag = DAG()
@@ -120,6 +128,7 @@ def test__DAG_get_sources():
     assert dag.get_sources() == {A,}
 
 
+@pytest.mark.run(order=2)
 def test__DAG_get_sinks():
     A, B = get_two_tasks()
     dag = DAG()
@@ -128,6 +137,7 @@ def test__DAG_get_sinks():
     assert dag.get_sinks() == {B,}
 
 
+@pytest.mark.run(order=2)
 def test__DAG_is_cyclic():
     A, B = get_two_tasks()
     dag = DAG()
