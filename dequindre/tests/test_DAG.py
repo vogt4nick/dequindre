@@ -3,7 +3,7 @@
 import pytest
 
 from dequindre import Task, DAG
-from dequindre.exceptions import CyclicGraphError
+from dequindre import CyclicGraphError
 
 # ----------------------------------------------------------------------------
 # Helper Functions
