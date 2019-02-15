@@ -44,8 +44,19 @@ class Task:
 
     def __hash__(self):
         """md5 is fast, and chances of colision are really low"""
-        big_int = int(md5(self.loc.encode()).hexdigest(), 16)
+        loc = self.loc
+        stage = str(self.stage)
+        env = self.env
+        hash_str = '-'.join((loc, stage, env))
+        big_int = int(md5(hash_str.encode()).hexdigest(), 16)
+        
         return big_int
+    
+
+    def __eq__(self, other: 'Task') -> bool:
+        if not isinstance(other, type(self)):
+            return False
+        return hash(self) == hash(other)
 
 
     def __lt__(self, other: 'Task') -> bool:
@@ -55,12 +66,12 @@ class Task:
 
     def __repr__(self):
         """Tasks are idenfied by their loc"""
-        return self.loc
+        return f"{Task.__qualname__}(loc={self.loc}, stage={self.stage}, env={self.env})"
 
 
     def __str__(self):
         """Tasks are idenfied by their loc"""
-        return self.loc
+        return repr(self)
 
 
 class DAG:
@@ -72,20 +83,26 @@ class DAG:
 
     Attributes:
         tasks (Set[Task]): The set of all tasks. Need not
-        dedges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
+        edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
             to a set of Tasks.
 
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Consider defining edges at instantiation.
     TODO: Define edges as downstream: upstream.
-    TODO: Consider renaming "dedge" to dependency or something more intuitive
+    TODO: Consider renaming "edge" to dependency or something more intuitive
         for users.
     """
 
     def __init__(self):
         self.tasks = set()
-        self.dedges = defaultdict(set)
+        self.edges = defaultdict(set)
         return None
+    
+
+    def __repr__(self):
+        if self.tasks:
+            return f"""{DAG.__qualname__}({repr(self.tasks)})"""
+        return f"{DAG.__qualname__}({set()})"
 
     # ------------------------------------------------------------------------
     # Config DAG
@@ -122,39 +139,71 @@ class DAG:
 
         self.tasks.remove(task)
 
-        # remove task from dedges
-        for k in self.dedges:
-            if task in self.dedges[k]:
-                self.dedges[k].remove(task)
-        if task in self.dedges:
-            del self.dedges[task]
+        # remove task from edges
+        for k in self.edges:
+            if task in self.edges[k]:
+                self.edges[k].remove(task)
+        if task in self.edges:
+            del self.edges[task]
 
         return None
 
 
-    def add_dedge(self, start: Task, end:Task):
+    def add_edge(self, start: Task, end:Task):
         """Add directed edge to DAG"""
         # error handling by add_tasks won't be clear to the user.
         assert isinstance(start, Task), TypeError('start is not a dequindre Task')
         assert isinstance(end, Task), TypeError('end is not a dequindre Task')
 
         self.add_tasks([start, end])
-        self.dedges[start].add(end)
+        self.edges[start].add(end)
 
         return None
 
 
-    def add_dedges(self, d: dict):
+    def add_edges(self, d: dict):
         """Add directed edges to the DAG"""
         for k, v in d.items():
             if isinstance(v, Task):
-                self.add_dedge(k, v)
+                self.add_edge(k, v)
                 continue
             elif isinstance(v, set):
                 for vi in v:
-                    self.add_dedge(k, vi)
+                    self.add_edge(k, vi)
 
         return None
+
+
+    def add_dependency(self, task: Task, depends_on: Task):
+        """Add dependency to DAG
+        
+        Examples:
+        >>> dag.add_dependency(steep_tea, depends_on=boil_water)
+        """
+        # error handling by add_tasks won't be clear to the user.
+        assert isinstance(task, Task), TypeError('start is not a dequindre Task')
+        assert isinstance(depends_on, Task), TypeError('end is not a dequindre Task')
+
+        self.add_tasks([task, depends_on])
+        self.edges[depends_on].add(task)
+
+        return None
+    
+    
+    def add_dependencies(self, d: Dict[Task, Set[Task]]):
+        """Add dependencies to DAG
+        
+        Examples:
+        >>> dag.add_dependencies({steep_tea: {boil_water, get_tea_leaves}})
+        """
+        for task, dependencies in d.items():
+            if isinstance(dependencies, Task):
+                dependency = dependencies 
+                self.add_dependency(task, dependency)
+                continue
+            elif isinstance(dependencies, set):
+                for dependency in dependencies:
+                    self.add_dependency(task, dependency)
 
     # ------------------------------------------------------------------------
     # Graph Utilities
@@ -162,7 +211,7 @@ class DAG:
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks."""
         return defaultdict(set,
-            {k: v for k, v in self.dedges.items() if len(v) > 0})
+            {k: v for k, v in self.edges.items() if len(v) > 0})
 
 
     def get_upstream(self) -> dict:
@@ -253,17 +302,18 @@ class Dequindre:
     TODO: Define exception for when cycles are detected
     """
     def __init__(self, dag: DAG, activate_env_cmd: str):
-        if dag.is_cyclic():
-            raise Exception('Cyclic DAG detected')
-
         assert isinstance(activate_env_cmd, str), 'activate_env_cmd must be a str'
-
+        assert len(activate_env_cmd) > 0, 'activate_env_cmd must not be an empty str'
         self.activate_env_cmd = activate_env_cmd
 
         self.original_dag = dag
         self.refresh_dag()
 
         return None
+    
+
+    def __repr__(self):
+        return f"{Dequindre.__qualname__}({self.dag})"
 
 
     def refresh_dag(self):
@@ -284,8 +334,8 @@ class Dequindre:
                 drink_tea: 3
             }
         """
-        assert isinstance(max_stage, int), TypeError('max_stage must be an int')
-        assert max_stage > 1, ValueError('max_stage must be greater than 1')
+        assert isinstance(max_stage, int), 'max_stage must be an int'
+        assert max_stage > 1, 'max_stage must be greater than 1'
         
         dag = self.dag  # copy to something easier to read
 

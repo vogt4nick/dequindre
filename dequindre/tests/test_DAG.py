@@ -1,3 +1,4 @@
+"""Unit tests for the DAG class."""
 
 import pytest
 
@@ -20,7 +21,7 @@ def get_cyclic_graph():
     C = Task('C.py', stage=1, env='test-env')
 
     dag = DAG()
-    dag.add_dedges({
+    dag.add_edges({
         A: B,
         B: C,
         C: A,
@@ -29,16 +30,23 @@ def get_cyclic_graph():
     return dag
 
 # ----------------------------------------------------------------------------
-# DAG.__init__
+# DAG magic methods
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_init():
     assert isinstance(DAG(), DAG), 'DAG init failed'
+
+
+def test__DAG_repr():
+    make_tea = Task('make_tea', 1, 'test-env')
+    dag = DAG()
+    dag.add_task(make_tea)
+    assert repr(dag) == "DAG({Task(loc=make_tea, stage=1, env=test-env)})"
 
 # ----------------------------------------------------------------------------
 # DAG.tasks
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_add_task():
     A, B = get_two_tasks()
 
@@ -48,6 +56,7 @@ def test__DAG_add_task():
     assert dag.tasks == {A,}, 'Test Task was not added to the DAG'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_add_tasks():
     A, B = get_two_tasks()
 
@@ -57,6 +66,7 @@ def test__DAG_add_tasks():
     assert dag.tasks == {A,B}, 'Test Tasks were not added to the DAG'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_remove_task():
     A, B = get_two_tasks()
 
@@ -67,71 +77,76 @@ def test__DAG_remove_task():
     assert dag.tasks == {B}, 'Test Task was not added to the DAG'
 
 # ----------------------------------------------------------------------------
-# DAG.dedges
+# DAG.edges
 # ----------------------------------------------------------------------------
-
-def test__DAG_add_dedge():
+@pytest.mark.run(order=2)
+def test__DAG_add_edge():
     A, B = get_two_tasks()
 
     dag = DAG()
     dag.add_tasks([A, B])
-    dag.add_dedge(A, B)
-    assert dag.dedges == {A: {B,}}, 'dedge was not created'
+    dag.add_edge(A, B)
+    assert dag.edges == {A: {B,}}, 'edge was not created'
 
     del dag 
     dag = DAG()
-    dag.add_dedge(A, B)
-    assert dag.dedges == {A: {B,}}, 'dedge Tasks were not added to DAG.tasks'
+    dag.add_edge(A, B)
+    assert dag.edges == {A: {B,}}, 'edge Tasks were not added to DAG.tasks'
 
 
-def test__DAG_dedges():
+@pytest.mark.run(order=2)
+def test__DAG_edges():
     A, B = get_two_tasks()
     dag = DAG()
-    dag.add_dedges({A: B})
-    assert isinstance(dag.dedges[A], set), 'dedge dict value is not a set'
+    dag.add_edges({A: B})
+    assert isinstance(dag.edges[A], set), 'edge dict value is not a set'
 
 # ----------------------------------------------------------------------------
 # methods
 # ----------------------------------------------------------------------------
-
+@pytest.mark.run(order=2)
 def test__DAG_get_downstream():
     A, B = get_two_tasks()
     dag = DAG()
-    dag.add_dedge(A, B)
+    dag.add_edge(A, B)
     assert dag.get_downstream() is not None
     assert dag.get_downstream()[A] == {B,}
     assert dag.get_downstream() == {A: {B,}}, 'Task B is not downstream'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_get_upstream():
     A, B = get_two_tasks()
     dag = DAG()
-    dag.add_dedge(A, B)
+    dag.add_edge(A, B)
     assert dag.get_upstream() is not None
     assert dag.get_upstream()[B] == {A,}
     assert dag.get_upstream() == {B: {A,}}, 'Task A is not upstream'
 
 
+@pytest.mark.run(order=2)
 def test__DAG_get_sources():
     A, B = get_two_tasks()
     dag = DAG()
-    dag.add_dedge(A, B)
+    dag.add_edge(A, B)
     assert dag.get_sources() is not None
     assert dag.get_sources() == {A,}
 
 
+@pytest.mark.run(order=2)
 def test__DAG_get_sinks():
     A, B = get_two_tasks()
     dag = DAG()
-    dag.add_dedge(A, B)
+    dag.add_edge(A, B)
     assert dag.get_sinks() is not None
     assert dag.get_sinks() == {B,}
 
 
+@pytest.mark.run(order=2)
 def test__DAG_is_cyclic():
     A, B = get_two_tasks()
     dag = DAG()
-    dag.add_dedge(A, B)
+    dag.add_edge(A, B)
     assert not dag.is_cyclic(), 'acyclic graph idenfied as cyclic'
     
     dag = get_cyclic_graph()
