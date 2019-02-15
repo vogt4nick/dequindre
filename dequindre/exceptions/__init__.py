@@ -1,4 +1,0 @@
-
-
-class CyclicGraphError(Exception):
-    pass

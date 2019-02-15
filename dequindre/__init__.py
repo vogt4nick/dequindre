@@ -14,7 +14,11 @@ from hashlib import md5
 from typing import Dict, Set
 from subprocess import run as subprocess_run
 from time import sleep
-from dequindre.exceptions import CyclicGraphError
+
+
+class CyclicGraphError(Exception):
+    pass
+
 
 class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
@@ -383,11 +387,10 @@ class Dequindre:
         assert hash(task) in [hash(t) for t in self.dag.tasks], \
             ValueError(f'{task} is not in the dag')
 
-        # requires conda >=4.6.0
+        # requires conda >=4.6
         r = subprocess_run(
-            f'{self.activate_env_cmd} {task.env} && python {task.loc}',
+            f'{task.env} {task.loc}',
             shell=True, check=True)
-
 
         return None
 
