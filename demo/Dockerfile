@@ -18,30 +18,34 @@ RUN apt-get update && apt-get install -y dos2unix
 # ----------------------------------------------------------------------------
 # Environment Variables
 # ----------------------------------------------------------------------------
+ENV HOME /opt
+ENV CONDA_DIR ${HOME}/conda/envs
+ENV DEQUINDRE_DIR ${HOME}/dequindre-demo
+RUN mkdir -p ${DEQUINDRE_DIR}
 
-ENV HOMEDIR /opt/demo
-RUN mkdir -p ${HOMEDIR}
+# ----------------------------------------------------------------------------
+# Build conda environments
+# ----------------------------------------------------------------------------
+# The conda envs don't change often. If we do the work here, we don't have to 
+# recreate the conda environments on every build. 
+# ----------------------------------------------------------------------------
+COPY ./packages ${DEQUINDRE_DIR}/packages
+COPY ./conda-envs ${DEQUINDRE_DIR}/conda-envs
+RUN find ${DEQUINDRE_DIR} -name *.sh | xargs chmod +x
+RUN find ${DEQUINDRE_DIR} -name *.sh | xargs dos2unix
+
+# create every environment
+RUN . ${DEQUINDRE_DIR}/conda-envs/setup-conda-envs.sh
 
 # ----------------------------------------------------------------------------
 # Setup image directory
 # ----------------------------------------------------------------------------
 
-COPY ./packages ${HOMEDIR}/packages
-COPY ./conda-envs ${HOMEDIR}/conda-envs
-COPY ./schedules ${HOMEDIR}/schedules
-COPY ./tasks/ ${HOMEDIR}/tasks
+COPY ./schedules ${DEQUINDRE_DIR}/schedules
+COPY ./tasks/ ${DEQUINDRE_DIR}/tasks
 
 # fix windows line endings 
-RUN find ${HOMEDIR} -name *.sh | xargs chmod +x
-RUN find ${HOMEDIR} -name *.sh | xargs dos2unix
-RUN find ${HOMEDIR} -name *.py | xargs chmod +x
-RUN find ${HOMEDIR} -name *.py | xargs dos2unix
+RUN find ${DEQUINDRE_DIR} -name *.py | xargs chmod +x
+RUN find ${DEQUINDRE_DIR} -name *.py | xargs dos2unix
 
-# ----------------------------------------------------------------------------
-# Setup Conda Environments
-# ----------------------------------------------------------------------------
-
-# create every environment
-RUN . ${HOMEDIR}/conda-envs/setup-conda-envs.sh
-
-# ENTRYPOINT [ "python", "opt/demo/schedules/demo.py" ]
+ENTRYPOINT [ "python", "opt/dequindre-demo/schedules/demo.py" ]
