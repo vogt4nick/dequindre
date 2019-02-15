@@ -3,6 +3,7 @@
 import pytest
 
 from dequindre import Task, DAG
+from dequindre.exceptions import CyclicGraphError
 
 # ----------------------------------------------------------------------------
 # Helper Functions
@@ -95,6 +96,50 @@ def test__DAG_edges():
     dag = DAG()
     dag.add_edges({A: B})
     assert isinstance(dag.edges[A], set), 'edge dict value is not a set'
+
+# ----------------------------------------------------------------------------
+# add dependencies
+# ----------------------------------------------------------------------------
+def test__DAG_add_dependency():
+    A, B = get_two_tasks()
+    dag = DAG()
+    dag.add_dependency(B, A)
+    assert dag.edges[A] == set([B])
+
+
+def test__DAG_add_dependency_detect_cycle():
+    A, B = get_two_tasks()
+    dag = DAG()
+    dag.add_dependency(B, A)
+    with pytest.raises(CyclicGraphError):
+        dag.add_dependency(A, B)
+
+
+def test__DAG_add_dependencies():
+    A, B = get_two_tasks()
+    C = Task('C.py', stage=1, env='test-env')
+    dag = DAG()
+    dag.add_dependencies({B: A})
+    assert dag.edges[A] == set([B])
+
+    dag = DAG()
+    dag.add_dependencies({C: {A, B}})
+    assert dag.edges[A] == set([C])
+    assert dag.edges[B] == set([C])
+
+
+def test__DAG_add_dependency_detect_cycle():
+    A, B = get_two_tasks()
+    C = Task('C.py', stage=1, env='test-env')
+
+    dag = DAG()
+    with pytest.raises(CyclicGraphError):
+        dag.add_dependencies({
+            A: C,
+            B: A,
+            C: B
+        })
+
 
 # ----------------------------------------------------------------------------
 # methods
