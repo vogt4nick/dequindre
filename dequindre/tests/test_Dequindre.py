@@ -91,7 +91,7 @@ def test__Dequindre_get_task_priorities():
     Z = Task('Z.py', 1, 'test-env')
     dag = DAG()
     dag.add_tasks([A, B, C, Z])
-    dag.add_dedges({A:B, B:C})
+    dag.add_edges({A:B, B:C})
     dq = Dequindre(dag, activate_env_cmd='. activate')
 
     priorities = dq.get_task_priorities(100)
@@ -127,7 +127,7 @@ def test__Dequindre_get_priorities():
     Z = Task('Z.py', 1, 'test-env')
     dag = DAG()
     dag.add_tasks([A, B, C, Z])
-    dag.add_dedges({A:B, B:C})
+    dag.add_edges({A:B, B:C})
     dq = Dequindre(dag, activate_env_cmd='. activate')
 
     priorities = dq.get_priorities(100)

@@ -83,19 +83,19 @@ class DAG:
 
     Attributes:
         tasks (Set[Task]): The set of all tasks. Need not
-        dedges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
+        edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
             to a set of Tasks.
 
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Consider defining edges at instantiation.
     TODO: Define edges as downstream: upstream.
-    TODO: Consider renaming "dedge" to dependency or something more intuitive
+    TODO: Consider renaming "edge" to dependency or something more intuitive
         for users.
     """
 
     def __init__(self):
         self.tasks = set()
-        self.dedges = defaultdict(set)
+        self.edges = defaultdict(set)
         return None
 
     # ------------------------------------------------------------------------
@@ -133,37 +133,37 @@ class DAG:
 
         self.tasks.remove(task)
 
-        # remove task from dedges
-        for k in self.dedges:
-            if task in self.dedges[k]:
-                self.dedges[k].remove(task)
-        if task in self.dedges:
-            del self.dedges[task]
+        # remove task from edges
+        for k in self.edges:
+            if task in self.edges[k]:
+                self.edges[k].remove(task)
+        if task in self.edges:
+            del self.edges[task]
 
         return None
 
 
-    def add_dedge(self, start: Task, end:Task):
+    def add_edge(self, start: Task, end:Task):
         """Add directed edge to DAG"""
         # error handling by add_tasks won't be clear to the user.
         assert isinstance(start, Task), TypeError('start is not a dequindre Task')
         assert isinstance(end, Task), TypeError('end is not a dequindre Task')
 
         self.add_tasks([start, end])
-        self.dedges[start].add(end)
+        self.edges[start].add(end)
 
         return None
 
 
-    def add_dedges(self, d: dict):
+    def add_edges(self, d: dict):
         """Add directed edges to the DAG"""
         for k, v in d.items():
             if isinstance(v, Task):
-                self.add_dedge(k, v)
+                self.add_edge(k, v)
                 continue
             elif isinstance(v, set):
                 for vi in v:
-                    self.add_dedge(k, vi)
+                    self.add_edge(k, vi)
 
         return None
 
@@ -179,7 +179,7 @@ class DAG:
         assert isinstance(depends_on, Task), TypeError('end is not a dequindre Task')
 
         self.add_tasks([task, depends_on])
-        self.dedges[depends_on].add(task)
+        self.edges[depends_on].add(task)
 
         return None
     
@@ -205,7 +205,7 @@ class DAG:
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks."""
         return defaultdict(set,
-            {k: v for k, v in self.dedges.items() if len(v) > 0})
+            {k: v for k, v in self.edges.items() if len(v) > 0})
 
 
     def get_upstream(self) -> dict:
