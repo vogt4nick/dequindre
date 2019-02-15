@@ -14,6 +14,7 @@ from hashlib import md5
 from typing import Dict, Set
 from subprocess import run as subprocess_run
 from time import sleep
+from dequindre.exceptions import CyclicGraphError
 
 class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
@@ -180,6 +181,12 @@ class DAG:
 
         self.add_tasks([task, depends_on])
         self.edges[depends_on].add(task)
+
+        # cycles can only be introduced here
+        if self.is_cyclic():
+            msg = f'Adding the dependency {depends_on} -> {task}' \
+                  f'introduced a cycle'
+            raise CyclicGraphError(msg)
 
         return None
     
