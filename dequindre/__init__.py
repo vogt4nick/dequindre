@@ -66,12 +66,12 @@ class Task:
 
     def __repr__(self):
         """Tasks are idenfied by their loc"""
-        return self.loc
+        return f"{Task.__qualname__}(loc={self.loc}, stage={self.stage}, env={self.env})"
 
 
     def __str__(self):
         """Tasks are idenfied by their loc"""
-        return self.loc
+        return repr(self)
 
 
 class DAG:
@@ -97,6 +97,12 @@ class DAG:
         self.tasks = set()
         self.edges = defaultdict(set)
         return None
+    
+
+    def __repr__(self):
+        if self.tasks:
+            return f"""{DAG.__qualname__}({repr(self.tasks)})"""
+        return f"{DAG.__qualname__}({set()})"
 
     # ------------------------------------------------------------------------
     # Config DAG
@@ -304,6 +310,10 @@ class Dequindre:
         self.refresh_dag()
 
         return None
+    
+
+    def __repr__(self):
+        return f"{Dequindre.__qualname__}({self.dag})"
 
 
     def refresh_dag(self):

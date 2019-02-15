@@ -37,6 +37,11 @@ def test__Task_init():
         Task(loc=good_loc, stage=good_stage, env='')
 
 
+def test__Task_repr():
+    make_tea = Task('make_tea', 1, 'test-env')
+    assert repr(make_tea) == "Task(loc=make_tea, stage=1, env=test-env)"
+
+
 def test__Task_hash():
     A = Task('test.py', 1, 'test-env')
     B = Task('test.py', 1, 'test-env')

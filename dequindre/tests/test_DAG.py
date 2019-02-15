@@ -8,7 +8,6 @@ from dequindre import Task, DAG
 # Helper Functions
 # ----------------------------------------------------------------------------
 
-@pytest.mark.run(order=2)
 def get_two_tasks():
     return (
         Task('A.py', stage=1, env='test-env'),
@@ -16,7 +15,6 @@ def get_two_tasks():
     )
 
 
-@pytest.mark.run(order=2)
 def get_cyclic_graph():
     A = Task('A.py', stage=1, env='test-env')
     B = Task('B.py', stage=1, env='test-env')
@@ -32,11 +30,18 @@ def get_cyclic_graph():
     return dag
 
 # ----------------------------------------------------------------------------
-# DAG.__init__
+# DAG magic methods
 # ----------------------------------------------------------------------------
 @pytest.mark.run(order=2)
 def test__DAG_init():
     assert isinstance(DAG(), DAG), 'DAG init failed'
+
+
+def test__DAG_repr():
+    make_tea = Task('make_tea', 1, 'test-env')
+    dag = DAG()
+    dag.add_task(make_tea)
+    assert repr(dag) == "DAG({Task(loc=make_tea, stage=1, env=test-env)})"
 
 # ----------------------------------------------------------------------------
 # DAG.tasks
