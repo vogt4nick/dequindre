@@ -399,6 +399,7 @@ class Dequindre:
         assert hash(task) in [hash(t) for t in self.dag.tasks], \
             ValueError(f'{task} is not in the dag')
 
+        print(f'\nRunning {repr(task)}\n')
         r = subprocess_run(
             f'{task.env} {task.loc}',
             shell=True, check=True)
