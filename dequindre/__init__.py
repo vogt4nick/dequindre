@@ -11,6 +11,7 @@ Design is intended
 from collections import defaultdict
 from copy import deepcopy
 from hashlib import md5
+import os
 from typing import Dict, Set
 from subprocess import run as subprocess_run
 from time import sleep
@@ -71,7 +72,8 @@ class Task:
 
     def __repr__(self):
         """Tasks are idenfied by their loc"""
-        return f"{Task.__qualname__}(loc={self.loc}, stage={self.stage}, env={self.env})"
+        filename = os.path.basename(self.loc)
+        return f"{Task.__qualname__}({filename})"
 
 
     def __str__(self):
@@ -397,6 +399,7 @@ class Dequindre:
         assert hash(task) in [hash(t) for t in self.dag.tasks], \
             ValueError(f'{task} is not in the dag')
 
+        print(f'\nRunning {repr(task)}\n')
         r = subprocess_run(
             f'{task.env} {task.loc}',
             shell=True, check=True)
