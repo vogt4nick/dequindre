@@ -48,6 +48,14 @@ def test__Dequindre_init():
     return None
 
 
+def test__Dequindre_repr():
+    make_tea = Task('make_tea', 1, 'test-env')
+    dag = DAG()
+    dag.add_task(make_tea)
+    dq = Dequindre(dag, 'activate')
+    assert repr(dq) == "Dequindre(DAG({Task(loc=make_tea, stage=1, env=test-env)}))"
+
+
 def test__Dequindre_refresh_dag():
     A = Task('A.py', 1, 'test-env')
     B = Task('B.py', 1, 'test-env')
@@ -152,4 +160,3 @@ def test__Dequindre_get_priorities():
 
 
 # test run tasks
-
