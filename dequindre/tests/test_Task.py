@@ -38,8 +38,8 @@ def test__Task_init():
 
 
 def test__Task_repr():
-    make_tea = Task('make_tea', 1, 'test-env')
-    assert repr(make_tea) == "Task(loc=make_tea, stage=1, env=test-env)"
+    make_tea = Task('make_tea.py', 1, 'test-env')
+    assert repr(make_tea) == "Task(make_tea.py)"
 
 
 def test__Task_hash():

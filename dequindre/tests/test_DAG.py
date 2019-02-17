@@ -38,10 +38,10 @@ def test__DAG_init():
 
 
 def test__DAG_repr():
-    make_tea = Task('make_tea', 1, 'test-env')
+    make_tea = Task('make_tea.py', 1, 'test-env')
     dag = DAG()
     dag.add_task(make_tea)
-    assert repr(dag) == "DAG({Task(loc=make_tea, stage=1, env=test-env)})"
+    assert repr(dag) == "DAG({Task(make_tea.py)})"
 
 # ----------------------------------------------------------------------------
 # DAG.tasks
