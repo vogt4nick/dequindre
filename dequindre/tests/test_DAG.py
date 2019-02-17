@@ -2,7 +2,7 @@
 
 import pytest
 
-from dequindre import Task, DAG
+from dequindre import Task, DAG, CyclicGraphError
 
 # ----------------------------------------------------------------------------
 # Helper Functions
