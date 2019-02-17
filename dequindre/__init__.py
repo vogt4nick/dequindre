@@ -71,12 +71,12 @@ class Task:
 
     def __repr__(self):
         """Tasks are idenfied by their loc"""
-        return self.loc
+        return f"{Task.__qualname__}(loc={self.loc}, stage={self.stage}, env={self.env})"
 
 
     def __str__(self):
         """Tasks are idenfied by their loc"""
-        return self.loc
+        return repr(self)
 
 
 class DAG:
@@ -102,6 +102,12 @@ class DAG:
         self.tasks = set()
         self.edges = defaultdict(set)
         return None
+    
+
+    def __repr__(self):
+        if self.tasks:
+            return f"""{DAG.__qualname__}({repr(self.tasks)})"""
+        return f"{DAG.__qualname__}({set()})"
 
     # ------------------------------------------------------------------------
     # Config DAG
@@ -315,6 +321,10 @@ class Dequindre:
         self.refresh_dag()
 
         return None
+    
+
+    def __repr__(self):
+        return f"{Dequindre.__qualname__}({self.dag})"
 
 
     def refresh_dag(self):
@@ -387,7 +397,6 @@ class Dequindre:
         assert hash(task) in [hash(t) for t in self.dag.tasks], \
             ValueError(f'{task} is not in the dag')
 
-        # requires conda >=4.6
         r = subprocess_run(
             f'{task.env} {task.loc}',
             shell=True, check=True)
@@ -407,4 +416,3 @@ class Dequindre:
                 except Exception as err:
                     print(err)
                 sleep(1)
-
