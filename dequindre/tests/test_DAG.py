@@ -2,7 +2,7 @@
 
 import pytest
 
-from dequindre import Task, DAG
+from dequindre import Task, DAG, CyclicGraphError
 
 # ----------------------------------------------------------------------------
 # Helper Functions
@@ -10,15 +10,15 @@ from dequindre import Task, DAG
 
 def get_two_tasks():
     return (
-        Task('A.py', stage=1, env='test-env'),
-        Task('B.py', stage=1, env='test-env')
+        Task('A.py', env='test-env'),
+        Task('B.py', env='test-env')
     )
 
 
 def get_cyclic_graph():
-    A = Task('A.py', stage=1, env='test-env')
-    B = Task('B.py', stage=1, env='test-env')
-    C = Task('C.py', stage=1, env='test-env')
+    A = Task('A.py', env='test-env')
+    B = Task('B.py', env='test-env')
+    C = Task('C.py', env='test-env')
 
     dag = DAG()
     dag.add_edges({
@@ -34,14 +34,19 @@ def get_cyclic_graph():
 # ----------------------------------------------------------------------------
 @pytest.mark.run(order=2)
 def test__DAG_init():
-    assert isinstance(DAG(), DAG), 'DAG init failed'
+    DAG()
+
+    # init with dependencies
+    make_tea = Task('make_tea.py', 'test-env')
+    drink_tea = Task('drink_tea.py', 'test-env')
+    DAG(dependencies={drink_tea: make_tea})
 
 
 def test__DAG_repr():
-    make_tea = Task('make_tea', 1, 'test-env')
+    make_tea = Task('make_tea.py', 'test-env')
     dag = DAG()
     dag.add_task(make_tea)
-    assert repr(dag) == "DAG({Task(loc=make_tea, stage=1, env=test-env)})"
+    assert repr(dag) == "DAG({Task(make_tea.py)})"
 
 # ----------------------------------------------------------------------------
 # DAG.tasks
@@ -61,7 +66,7 @@ def test__DAG_add_tasks():
     A, B = get_two_tasks()
 
     dag = DAG()
-    dag.add_tasks([A, B])
+    dag.add_tasks({A, B})
 
     assert dag.tasks == {A,B}, 'Test Tasks were not added to the DAG'
 
@@ -71,7 +76,7 @@ def test__DAG_remove_task():
     A, B = get_two_tasks()
 
     dag = DAG()
-    dag.add_tasks([A, B])
+    dag.add_tasks({A, B})
     dag.remove_task(A)
 
     assert dag.tasks == {B}, 'Test Task was not added to the DAG'
@@ -84,7 +89,7 @@ def test__DAG_add_edge():
     A, B = get_two_tasks()
 
     dag = DAG()
-    dag.add_tasks([A, B])
+    dag.add_tasks({A, B})
     dag.add_edge(A, B)
     assert dag.edges == {A: {B,}}, 'edge was not created'
 
@@ -100,6 +105,49 @@ def test__DAG_edges():
     dag = DAG()
     dag.add_edges({A: B})
     assert isinstance(dag.edges[A], set), 'edge dict value is not a set'
+
+# ----------------------------------------------------------------------------
+# add dependencies
+# ----------------------------------------------------------------------------
+def test__DAG_add_dependency():
+    A, B = get_two_tasks()
+    dag = DAG()
+    dag.add_dependency(B, A)
+    assert dag.edges[A] == set([B])
+
+
+def test__DAG_add_dependency_detect_cycle():
+    A, B = get_two_tasks()
+    dag = DAG()
+    dag.add_dependency(B, A)
+    with pytest.raises(CyclicGraphError):
+        dag.add_dependency(A, B)
+
+
+def test__DAG_add_dependencies():
+    A, B = get_two_tasks()
+    C = Task('C.py', env='test-env')
+    dag = DAG()
+    dag.add_dependencies({B: A})
+    assert dag.edges[A] == set([B])
+
+    dag = DAG()
+    dag.add_dependencies({C: {A, B}})
+    assert dag.edges[A] == set([C])
+    assert dag.edges[B] == set([C])
+
+
+def test__DAG_add_dependency_detect_cycle():
+    A, B = get_two_tasks()
+    C = Task('C.py', env='test-env')
+
+    dag = DAG()
+    with pytest.raises(CyclicGraphError):
+        dag.add_dependencies({
+            A: C,
+            B: A,
+            C: B
+        })
 
 # ----------------------------------------------------------------------------
 # methods

@@ -4,39 +4,62 @@
 This module defines the Task, DAG, and Dequindre classes. Tasks are intended to
 hold task-level data. DAGs are intended to hold relationships between Tasks.
 Dequindre schedules Tasks in accordance with the DAG(s).
-
-Design is intended
 """
 
 from collections import defaultdict
 from copy import deepcopy
 from hashlib import md5
+import os
 from typing import Dict, Set
 from subprocess import run as subprocess_run
+from subprocess import check_output, CalledProcessError
 from time import sleep
+
+
+class CyclicGraphError(Exception):
+    pass
+
+
+class CondaVersionError(Exception):
+    pass
+
+
+def check_conda():
+    """Verify the machine has a version of conda capable of using `run`. 
+
+    `conda run -n base python 'print("test")'` 
+    """
+    host_version = check_output('conda --version', shell=True).decode().strip()
+    cmd = """ conda run -n base python -c 'print("test...")' """
+    try:
+        check_output(cmd, shell=True)
+    except CalledProcessError:
+        msg = (
+            """Your version of conda does not support the 'conda run' """
+            f"""function. Your machine has {host_version} installed. """
+            """You must upgrade to upgrade to conda >=4.6 to use dequindre."""
+        )
+        raise CondaVersionError(msg)
+
 
 class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
     are equal.
 
-    Tasks are instantiated by three variables: loc, stage, and env.
+    Tasks are instantiated by three variables: loc, and env.
 
     Args and Attributes:
         loc (str): location of the python script that runs the task.
-        stage (int, >0): Prioritizes tasks. e.g. Tasks with stage 2 run after
-            all stage 1 tasks have completed.
         env (str): Which environment to run.
     """
-    def __init__(self, loc: str, stage: int, env: str):
+    def __init__(self, loc: str, env: str):
+        # check_conda()
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
-        assert isinstance(stage, int), 'stage must be an int'
-        assert stage > 0, 'Stage must be > 0'
         assert isinstance(env, str), 'env must be a str'
         assert len(env) > 0, 'env cannot be an empty string'
 
         self.loc = loc
-        self.stage = stage
         self.env = env
 
         return None
@@ -45,9 +68,8 @@ class Task:
     def __hash__(self):
         """md5 is fast, and chances of colision are really low"""
         loc = self.loc
-        stage = str(self.stage)
         env = self.env
-        hash_str = '-'.join((loc, stage, env))
+        hash_str = '-'.join((loc, env))
         big_int = int(md5(hash_str.encode()).hexdigest(), 16)
         
         return big_int
@@ -66,7 +88,7 @@ class Task:
 
     def __repr__(self):
         """Tasks are idenfied by their loc"""
-        return f"{Task.__qualname__}(loc={self.loc}, stage={self.stage}, env={self.env})"
+        return f"{Task.__qualname__}({self.loc})"
 
 
     def __str__(self):
@@ -93,9 +115,19 @@ class DAG:
         for users.
     """
 
-    def __init__(self):
+    def __init__(self, *, tasks: set = None, dependencies: dict = None):
+        # check_conda()
         self.tasks = set()
         self.edges = defaultdict(set)
+
+        if tasks is not None:
+            assert isinstance(tasks, set), '`tasks` must be a set of tasks'
+            self.add_tasks(tasks)
+
+        if dependencies is not None:
+            assert isinstance(dependencies, dict), '`dependencies` must be a dict'
+            self.add_dependencies(dependencies)
+
         return None
     
 
@@ -116,13 +148,13 @@ class DAG:
         return None
 
 
-    def add_tasks(self, tasks: list):
+    def add_tasks(self, tasks: set):
         """Add multiple tasks to the set of tasks
 
         TODO: Handle iterables
         TODO: Handle non-iterables
         """
-        assert isinstance(tasks, list), TypeError('tasks is not a list')
+        assert isinstance(tasks, set), TypeError('tasks is not a set')
 
         for t in tasks:
             self.add_task(t)
@@ -155,7 +187,7 @@ class DAG:
         assert isinstance(start, Task), TypeError('start is not a dequindre Task')
         assert isinstance(end, Task), TypeError('end is not a dequindre Task')
 
-        self.add_tasks([start, end])
+        self.add_tasks({start, end})
         self.edges[start].add(end)
 
         return None
@@ -184,8 +216,14 @@ class DAG:
         assert isinstance(task, Task), TypeError('start is not a dequindre Task')
         assert isinstance(depends_on, Task), TypeError('end is not a dequindre Task')
 
-        self.add_tasks([task, depends_on])
+        self.add_tasks({task, depends_on})
         self.edges[depends_on].add(task)
+
+        # cycles can only be introduced here
+        if self.is_cyclic():
+            msg = f'Adding the dependency {depends_on} -> {task}' \
+                  f'introduced a cycle'
+            raise CyclicGraphError(msg)
 
         return None
     
@@ -290,7 +328,6 @@ class Dequindre:
 
     Arguments:
         dag (DAG): A DAG of tasks to be scheduled.
-        activate_env_cmd (str): e.g. ". activate", "source activate"
 
     Attributes:
         dag (DAG): A copy of the originally supplied DAG. This attribute is
@@ -301,11 +338,8 @@ class Dequindre:
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Define exception for when cycles are detected
     """
-    def __init__(self, dag: DAG, activate_env_cmd: str):
-        assert isinstance(activate_env_cmd, str), 'activate_env_cmd must be a str'
-        assert len(activate_env_cmd) > 0, 'activate_env_cmd must not be an empty str'
-        self.activate_env_cmd = activate_env_cmd
-
+    def __init__(self, dag: DAG):
+        check_conda()
         self.original_dag = dag
         self.refresh_dag()
 
@@ -323,7 +357,7 @@ class Dequindre:
         return None
 
 
-    def get_task_priorities(self, max_stage) -> Dict[Task, int]:
+    def get_task_priorities(self) -> Dict[Task, int]:
         """Define priority level for each task
 
         Example:
@@ -334,16 +368,7 @@ class Dequindre:
                 drink_tea: 3
             }
         """
-        assert isinstance(max_stage, int), 'max_stage must be an int'
-        assert max_stage > 1, 'max_stage must be greater than 1'
-        
         dag = self.dag  # copy to something easier to read
-
-        too_high_stage = set([t for t in dag.tasks if t.stage > max_stage])
-
-        for task in too_high_stage:
-            dag.remove_task(task)
-
         task_priority = defaultdict(int)
         visited = set()
         i = 1
@@ -360,7 +385,7 @@ class Dequindre:
         return task_priority
 
 
-    def get_priorities(self, max_stage) -> Dict[int, Set[Task]]:
+    def get_priorities(self) -> Dict[int, Set[Task]]:
         """Define tasks for each priority level.
 
         Example:
@@ -372,7 +397,7 @@ class Dequindre:
             }
         """
         priorities = defaultdict(set)
-        task_priorities = self.get_task_priorities(max_stage=max_stage)
+        task_priorities = self.get_task_priorities()
         for k, v in task_priorities.items():
             priorities[v].add(k)
 
@@ -386,19 +411,18 @@ class Dequindre:
         assert hash(task) in [hash(t) for t in self.dag.tasks], \
             ValueError(f'{task} is not in the dag')
 
-        # requires conda >=4.6.0
+        print(f'\nRunning {repr(task)}\n')
         r = subprocess_run(
-            f'{self.activate_env_cmd} {task.env} && python {task.loc}',
+            f'conda run -n {task.env} python {task.loc}',
             shell=True, check=True)
-
 
         return None
 
 
-    def run_tasks(self, max_stage: int = 10000):
-        """Run all tasks on the DAG that are less than max_stage"""
+    def run_tasks(self):
+        """Run all tasks on the DAG"""
         self.refresh_dag()  # refresh just in case
-        priorities = self.get_priorities(max_stage=max_stage)
+        priorities = self.get_priorities()
 
         for k, tasks in priorities.items():
             for task in tasks:
@@ -407,4 +431,3 @@ class Dequindre:
                 except Exception as err:
                     print(err)
                 sleep(1)
-
