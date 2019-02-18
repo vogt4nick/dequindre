@@ -11,9 +11,9 @@ from dequindre import Task, DAG, Dequindre
 def test__Dequindre_init_exceptions():
     """Raise expected exceptions
     """
-    A = Task('A.py', 1, 'test-env')
-    B = Task('B.py', 1, 'test-env')
-    C = Task('C.py', 1, 'test-env')
+    A = Task('A.py', 'test-env')
+    B = Task('B.py', 'test-env')
+    C = Task('C.py', 'test-env')
 
     dag = DAG()
     dag.add_tasks([A, B, C])
@@ -37,9 +37,9 @@ def test__Dequindre_init_exceptions():
 def test__Dequindre_init():
     """Nothing should break here
     """
-    A = Task('A.py', 1, 'test-env')
-    B = Task('B.py', 1, 'test-env')
-    C = Task('C.py', 1, 'test-env')
+    A = Task('A.py', 'test-env')
+    B = Task('B.py', 'test-env')
+    C = Task('C.py', 'test-env')
 
     dag = DAG()
     dag.add_tasks([A, B, C])
@@ -49,7 +49,7 @@ def test__Dequindre_init():
 
 
 def test__Dequindre_repr():
-    make_tea = Task('make_tea.py', 1, 'test-env')
+    make_tea = Task('make_tea.py', 'test-env')
     dag = DAG()
     dag.add_task(make_tea)
     dq = Dequindre(dag, 'activate')
@@ -57,9 +57,9 @@ def test__Dequindre_repr():
 
 
 def test__Dequindre_refresh_dag():
-    A = Task('A.py', 1, 'test-env')
-    B = Task('B.py', 1, 'test-env')
-    C = Task('C.py', 1, 'test-env')
+    A = Task('A.py', 'test-env')
+    B = Task('B.py', 'test-env')
+    C = Task('C.py', 'test-env')
     dag = DAG()
     dag.add_tasks([A, B, C])
     dq = Dequindre(dag, activate_env_cmd='. activate')
@@ -78,31 +78,16 @@ def test__Dequindre_refresh_dag():
 
 
 def test__Dequindre_get_task_priorities():
-    A = Task('A.py', 1, 'test-env')
-    dag = DAG()
-    dag.add_task(A)
-    dq = Dequindre(dag, activate_env_cmd='. activate')
-
-    with pytest.raises(AssertionError, match='max_stage must be an int'):
-        dq.get_task_priorities(max_stage='prod')
-    with pytest.raises(AssertionError, 
-        match='max_stage must be greater than 1'):
-        dq.get_task_priorities(max_stage=0)
-
-    return None
-
-
-def test__Dequindre_get_task_priorities():
-    A = Task('A.py', 1, 'test-env')
-    B = Task('B.py', 1, 'test-env')
-    C = Task('C.py', 1, 'test-env')
-    Z = Task('Z.py', 1, 'test-env')
+    A = Task('A.py', 'test-env')
+    B = Task('B.py', 'test-env')
+    C = Task('C.py', 'test-env')
+    Z = Task('Z.py', 'test-env')
     dag = DAG()
     dag.add_tasks([A, B, C, Z])
     dag.add_edges({A:B, B:C})
     dq = Dequindre(dag, activate_env_cmd='. activate')
 
-    priorities = dq.get_task_priorities(100)
+    priorities = dq.get_task_priorities()
 
     testable = {hash(k): v for k, v in priorities.items()}
     assert testable == {
@@ -113,32 +98,17 @@ def test__Dequindre_get_task_priorities():
     }
 
 
-def test__Dequindre_get_priorities_exceptions():
-    A = Task('A.py', 1, 'test-env')
-    dag = DAG()
-    dag.add_task(A)
-    dq = Dequindre(dag, activate_env_cmd='. activate')
-
-    with pytest.raises(AssertionError, match='max_stage must be an int'):
-        dq.get_priorities(max_stage='prod')
-    with pytest.raises(AssertionError, 
-        match='max_stage must be greater than 1'):
-        dq.get_priorities(max_stage=0)
-
-    return None
-
-
 def test__Dequindre_get_priorities():
-    A = Task('A.py', 1, 'test-env')
-    B = Task('B.py', 1, 'test-env')
-    C = Task('C.py', 1, 'test-env')
-    Z = Task('Z.py', 1, 'test-env')
+    A = Task('A.py', 'test-env')
+    B = Task('B.py', 'test-env')
+    C = Task('C.py', 'test-env')
+    Z = Task('Z.py', 'test-env')
     dag = DAG()
     dag.add_tasks([A, B, C, Z])
     dag.add_edges({A:B, B:C})
     dq = Dequindre(dag, activate_env_cmd='. activate')
 
-    priorities = dq.get_priorities(100)
+    priorities = dq.get_priorities()
     testable = {}
 
     # build a testable result dict

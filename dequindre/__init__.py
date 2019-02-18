@@ -25,24 +25,19 @@ class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
     are equal.
 
-    Tasks are instantiated by three variables: loc, stage, and env.
+    Tasks are instantiated by three variables: loc, and env.
 
     Args and Attributes:
         loc (str): location of the python script that runs the task.
-        stage (int, >0): Prioritizes tasks. e.g. Tasks with stage 2 run after
-            all stage 1 tasks have completed.
         env (str): Which environment to run.
     """
-    def __init__(self, loc: str, stage: int, env: str):
+    def __init__(self, loc: str, env: str):
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
-        assert isinstance(stage, int), 'stage must be an int'
-        assert stage > 0, 'Stage must be > 0'
         assert isinstance(env, str), 'env must be a str'
         assert len(env) > 0, 'env cannot be an empty string'
 
         self.loc = loc
-        self.stage = stage
         self.env = env
 
         return None
@@ -51,9 +46,8 @@ class Task:
     def __hash__(self):
         """md5 is fast, and chances of colision are really low"""
         loc = self.loc
-        stage = str(self.stage)
         env = self.env
-        hash_str = '-'.join((loc, stage, env))
+        hash_str = '-'.join((loc, env))
         big_int = int(md5(hash_str.encode()).hexdigest(), 16)
         
         return big_int
@@ -336,7 +330,7 @@ class Dequindre:
         return None
 
 
-    def get_task_priorities(self, max_stage) -> Dict[Task, int]:
+    def get_task_priorities(self) -> Dict[Task, int]:
         """Define priority level for each task
 
         Example:
@@ -347,16 +341,7 @@ class Dequindre:
                 drink_tea: 3
             }
         """
-        assert isinstance(max_stage, int), 'max_stage must be an int'
-        assert max_stage > 1, 'max_stage must be greater than 1'
-        
         dag = self.dag  # copy to something easier to read
-
-        too_high_stage = set([t for t in dag.tasks if t.stage > max_stage])
-
-        for task in too_high_stage:
-            dag.remove_task(task)
-
         task_priority = defaultdict(int)
         visited = set()
         i = 1
@@ -373,7 +358,7 @@ class Dequindre:
         return task_priority
 
 
-    def get_priorities(self, max_stage) -> Dict[int, Set[Task]]:
+    def get_priorities(self) -> Dict[int, Set[Task]]:
         """Define tasks for each priority level.
 
         Example:
@@ -385,7 +370,7 @@ class Dequindre:
             }
         """
         priorities = defaultdict(set)
-        task_priorities = self.get_task_priorities(max_stage=max_stage)
+        task_priorities = self.get_task_priorities()
         for k, v in task_priorities.items():
             priorities[v].add(k)
 
@@ -407,10 +392,10 @@ class Dequindre:
         return None
 
 
-    def run_tasks(self, max_stage: int = 10000):
-        """Run all tasks on the DAG that are less than max_stage"""
+    def run_tasks(self):
+        """Run all tasks on the DAG"""
         self.refresh_dag()  # refresh just in case
-        priorities = self.get_priorities(max_stage=max_stage)
+        priorities = self.get_priorities()
 
         for k, tasks in priorities.items():
             for task in tasks:

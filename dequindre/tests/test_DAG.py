@@ -10,15 +10,15 @@ from dequindre import Task, DAG, CyclicGraphError
 
 def get_two_tasks():
     return (
-        Task('A.py', stage=1, env='test-env'),
-        Task('B.py', stage=1, env='test-env')
+        Task('A.py', env='test-env'),
+        Task('B.py', env='test-env')
     )
 
 
 def get_cyclic_graph():
-    A = Task('A.py', stage=1, env='test-env')
-    B = Task('B.py', stage=1, env='test-env')
-    C = Task('C.py', stage=1, env='test-env')
+    A = Task('A.py', env='test-env')
+    B = Task('B.py', env='test-env')
+    C = Task('C.py', env='test-env')
 
     dag = DAG()
     dag.add_edges({
@@ -38,7 +38,7 @@ def test__DAG_init():
 
 
 def test__DAG_repr():
-    make_tea = Task('make_tea.py', 1, 'test-env')
+    make_tea = Task('make_tea.py', 'test-env')
     dag = DAG()
     dag.add_task(make_tea)
     assert repr(dag) == "DAG({Task(make_tea.py)})"
@@ -121,7 +121,7 @@ def test__DAG_add_dependency_detect_cycle():
 
 def test__DAG_add_dependencies():
     A, B = get_two_tasks()
-    C = Task('C.py', stage=1, env='test-env')
+    C = Task('C.py', env='test-env')
     dag = DAG()
     dag.add_dependencies({B: A})
     assert dag.edges[A] == set([B])
@@ -134,7 +134,7 @@ def test__DAG_add_dependencies():
 
 def test__DAG_add_dependency_detect_cycle():
     A, B = get_two_tasks()
-    C = Task('C.py', stage=1, env='test-env')
+    C = Task('C.py', env='test-env')
 
     dag = DAG()
     with pytest.raises(CyclicGraphError):
