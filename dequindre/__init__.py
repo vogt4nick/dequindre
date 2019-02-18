@@ -340,8 +340,9 @@ class Dequindre:
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Define exception for when cycles are detected
     """
-    def __init__(self, dag: DAG):
-        check_conda()
+    def __init__(self, dag: DAG, *, validate_conda: bool = True):
+        if validate_conda:
+            check_conda()
         self.original_dag = dag
         self.refresh_dag()
 
