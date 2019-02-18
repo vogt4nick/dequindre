@@ -4,8 +4,6 @@
 This module defines the Task, DAG, and Dequindre classes. Tasks are intended to
 hold task-level data. DAGs are intended to hold relationships between Tasks.
 Dequindre schedules Tasks in accordance with the DAG(s).
-
-Design is intended
 """
 
 from collections import defaultdict
