@@ -8,4 +8,6 @@
                |_|
 ```
 
-Dequindre (_deh-KWIN-der_) is a minimalist scheduler for workflow automation. Dequindre makes it easy to configure, test, and deploy POC data pipelines. It also functions as a learning tool for students and professionals without the time or resources to setup the requisite architecture for a production data pipeline.  
+Dequindre /_de-KWIN-der_/ (n.): A minimalist scheduler for simple workflow automation. 
+
+Dequindre makes it easy to configure, test, and deploy workflows. It also functions as a learning tool for students and professionals without the time or resources to setup the requisite architecture for a production data pipeline.  
