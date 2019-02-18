@@ -90,8 +90,7 @@ class Task:
 
     def __repr__(self):
         """Tasks are idenfied by their loc"""
-        filename = os.path.basename(self.loc)
-        return f"{Task.__qualname__}({filename})"
+        return f"{Task.__qualname__}({self.loc})"
 
 
     def __str__(self):
