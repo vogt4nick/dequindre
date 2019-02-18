@@ -20,15 +20,6 @@ def test__Dequindre_init_exceptions():
 
     with pytest.raises(TypeError):
         Dequindre()
-    with pytest.raises(TypeError):
-        Dequindre(dag)
-    with pytest.raises(AssertionError, match='activate_env_cmd must be a str'):
-        Dequindre(dag, activate_env_cmd=1)
-    with pytest.raises(AssertionError, match='activate_env_cmd must be a str'):
-        Dequindre(dag, activate_env_cmd=None)
-    with pytest.raises(AssertionError,
-        match='activate_env_cmd must not be an empty str'):
-        Dequindre(dag, activate_env_cmd='')
 
     return None
 
@@ -43,7 +34,7 @@ def test__Dequindre_init():
 
     dag = DAG()
     dag.add_tasks([A, B, C])
-    dq = Dequindre(dag, activate_env_cmd='. activate')
+    dq = Dequindre(dag)
 
     return None
 
@@ -52,7 +43,7 @@ def test__Dequindre_repr():
     make_tea = Task('make_tea.py', 'test-env')
     dag = DAG()
     dag.add_task(make_tea)
-    dq = Dequindre(dag, 'activate')
+    dq = Dequindre(dag)
     assert repr(dq) == "Dequindre(DAG({Task(make_tea.py)}))"
 
 
@@ -62,7 +53,7 @@ def test__Dequindre_refresh_dag():
     C = Task('C.py', 'test-env')
     dag = DAG()
     dag.add_tasks([A, B, C])
-    dq = Dequindre(dag, activate_env_cmd='. activate')
+    dq = Dequindre(dag)
 
     tasks = sorted(list(dq.dag.tasks))
     for t in tasks:
@@ -85,7 +76,7 @@ def test__Dequindre_get_task_priorities():
     dag = DAG()
     dag.add_tasks([A, B, C, Z])
     dag.add_edges({A:B, B:C})
-    dq = Dequindre(dag, activate_env_cmd='. activate')
+    dq = Dequindre(dag)
 
     priorities = dq.get_task_priorities()
 
@@ -106,7 +97,7 @@ def test__Dequindre_get_priorities():
     dag = DAG()
     dag.add_tasks([A, B, C, Z])
     dag.add_edges({A:B, B:C})
-    dq = Dequindre(dag, activate_env_cmd='. activate')
+    dq = Dequindre(dag)
 
     priorities = dq.get_priorities()
     testable = {}

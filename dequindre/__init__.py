@@ -297,7 +297,6 @@ class Dequindre:
 
     Arguments:
         dag (DAG): A DAG of tasks to be scheduled.
-        activate_env_cmd (str): e.g. ". activate", "source activate"
 
     Attributes:
         dag (DAG): A copy of the originally supplied DAG. This attribute is
@@ -308,11 +307,7 @@ class Dequindre:
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Define exception for when cycles are detected
     """
-    def __init__(self, dag: DAG, activate_env_cmd: str):
-        assert isinstance(activate_env_cmd, str), 'activate_env_cmd must be a str'
-        assert len(activate_env_cmd) > 0, 'activate_env_cmd must not be an empty str'
-        self.activate_env_cmd = activate_env_cmd
-
+    def __init__(self, dag: DAG):
         self.original_dag = dag
         self.refresh_dag()
 
