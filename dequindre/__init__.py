@@ -52,8 +52,7 @@ class Task:
         loc (str): location of the python script that runs the task.
         env (str): Which environment to run.
     """
-    def __init__(self, loc: str, env: str):
-        # check_conda()
+    def __init__(self, loc: str, env: str = 'base'):
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'

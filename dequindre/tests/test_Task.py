@@ -10,10 +10,9 @@ def test__Task_init():
     good_loc = 'path/to/file.py'
     good_env = 'test-env'
 
-    assert isinstance(
-        Task(loc=good_loc, env=good_env),
-        Task
-    )
+    with pytest.raises(TypeError):
+        Task()
+
     with pytest.raises(AssertionError):
         Task(loc=None, env=good_env)
 
@@ -25,6 +24,9 @@ def test__Task_init():
 
     with pytest.raises(AssertionError):
         Task(loc=good_loc, env='')
+
+    Task(loc=good_loc)
+    Task(loc=good_loc, env=good_env)
 
 
 def test__Task_repr():
