@@ -1,8 +1,13 @@
 from setuptools import setup, find_packages
 
+version = {}
+with open('./dequindre/version.py', 'r') as ifile:
+    exec(ifile.read(), version)
+
+
 setup(
     name='dequindre',
-    version='0.3.0',
+    version=version['__version__'],
     description="Dequindre: a lightweight scheduler.",
     long_description=open('readme.md').read(),
     url='https://github.com/vogt4nick/dequindre',
