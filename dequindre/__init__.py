@@ -14,11 +14,34 @@ from hashlib import md5
 import os
 from typing import Dict, Set
 from subprocess import run as subprocess_run
+from subprocess import check_output, CalledProcessError
 from time import sleep
 
 
 class CyclicGraphError(Exception):
     pass
+
+
+class CondaVersionError(Exception):
+    pass
+
+
+def check_conda():
+    """Verify the machine has a version of conda capable of using `run`. 
+
+    `conda run -n base python 'print("test")'` 
+    """
+    host_version = check_output('conda --version', shell=True).decode().strip()
+    cmd = """ conda run -n base python -c 'print("test...")' """
+    try:
+        check_output(cmd, shell=True)
+    except CalledProcessError:
+        msg = (
+            """Your version of conda does not support the 'conda run' """
+            f"""function. Your machine has {host_version} installed. """
+            """You must upgrade to upgrade to conda >=4.6 to use dequindre."""
+        )
+        raise CondaVersionError(msg)
 
 
 class Task:
@@ -32,6 +55,7 @@ class Task:
         env (str): Which environment to run.
     """
     def __init__(self, loc: str, env: str):
+        check_conda()
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
@@ -95,6 +119,7 @@ class DAG:
     """
 
     def __init__(self):
+        check_conda()
         self.tasks = set()
         self.edges = defaultdict(set)
         return None
@@ -308,6 +333,7 @@ class Dequindre:
     TODO: Define exception for when cycles are detected
     """
     def __init__(self, dag: DAG):
+        check_conda()
         self.original_dag = dag
         self.refresh_dag()
 
@@ -381,7 +407,7 @@ class Dequindre:
 
         print(f'\nRunning {repr(task)}\n')
         r = subprocess_run(
-            f'{task.env} {task.loc}',
+            f'conda run -n {task.env} python {task.loc}',
             shell=True, check=True)
 
         return None
