@@ -15,6 +15,7 @@ setup(
     author_email='vogt4nick@gmail.com',
     license='MIT',
     packages=["dequindre"],
+    include_package_data=True,
     # install_requires='',
     test_suite='nose.collector',
     tests_require=['nose']
