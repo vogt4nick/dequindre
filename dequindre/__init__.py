@@ -53,7 +53,7 @@ class Task:
         env (str): Which environment to run.
     """
     def __init__(self, loc: str, env: str):
-        check_conda()
+        # check_conda()
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
@@ -116,7 +116,7 @@ class DAG:
     """
 
     def __init__(self):
-        check_conda()
+        # check_conda()
         self.tasks = set()
         self.edges = defaultdict(set)
         return None
