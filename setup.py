@@ -13,8 +13,12 @@ setup(
     url='https://github.com/vogt4nick/dequindre',
     author='Nick Vogt',
     author_email='vogt4nick@gmail.com',
-    license='MIT',
     packages=["dequindre"],
+    classifiers=[
+        "Development Status :: 2 - Pre-Alpha",
+        "Programming Language :: Python",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+    ],
     include_package_data=True,
     # install_requires='',
     test_suite='nose.collector',
