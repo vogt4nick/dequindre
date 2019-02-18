@@ -7,7 +7,10 @@ with open('./dequindre/__init__.py', 'r') as ifile:
 setup(
     name='dequindre',
     version=version['__version__'],
-    description="Dequindre: a lightweight scheduler.",
+    description=(
+        "Dequindre /_de-KWIN-der_/ (n.): "
+        "A minimalist scheduler for simple workflow automation."
+    ),
     long_description=open('readme.md').read(),
     long_description_content_type="text/markdown",
     url='https://github.com/vogt4nick/dequindre',
@@ -20,8 +23,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent"
     ],
-    include_package_data=True,
-    # install_requires='',
-    test_suite='nose.collector',
-    tests_require=['nose']
+    include_package_data=True
 )
