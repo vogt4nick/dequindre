@@ -9,6 +9,7 @@ setup(
     version=version['__version__'],
     description="Dequindre: a lightweight scheduler.",
     long_description=open('readme.md').read(),
+    long_description_content_type="text/markdown",
     url='https://github.com/vogt4nick/dequindre',
     author='Nick Vogt',
     author_email='vogt4nick@gmail.com',
