@@ -61,7 +61,7 @@ def test__DAG_add_tasks():
     A, B = get_two_tasks()
 
     dag = DAG()
-    dag.add_tasks([A, B])
+    dag.add_tasks({A, B})
 
     assert dag.tasks == {A,B}, 'Test Tasks were not added to the DAG'
 
@@ -71,7 +71,7 @@ def test__DAG_remove_task():
     A, B = get_two_tasks()
 
     dag = DAG()
-    dag.add_tasks([A, B])
+    dag.add_tasks({A, B})
     dag.remove_task(A)
 
     assert dag.tasks == {B}, 'Test Task was not added to the DAG'
@@ -84,7 +84,7 @@ def test__DAG_add_edge():
     A, B = get_two_tasks()
 
     dag = DAG()
-    dag.add_tasks([A, B])
+    dag.add_tasks({A, B})
     dag.add_edge(A, B)
     assert dag.edges == {A: {B,}}, 'edge was not created'
 

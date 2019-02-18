@@ -117,13 +117,13 @@ class DAG:
         return None
 
 
-    def add_tasks(self, tasks: list):
+    def add_tasks(self, tasks: set):
         """Add multiple tasks to the set of tasks
 
         TODO: Handle iterables
         TODO: Handle non-iterables
         """
-        assert isinstance(tasks, list), TypeError('tasks is not a list')
+        assert isinstance(tasks, set), TypeError('tasks is not a set')
 
         for t in tasks:
             self.add_task(t)
@@ -156,7 +156,7 @@ class DAG:
         assert isinstance(start, Task), TypeError('start is not a dequindre Task')
         assert isinstance(end, Task), TypeError('end is not a dequindre Task')
 
-        self.add_tasks([start, end])
+        self.add_tasks({start, end})
         self.edges[start].add(end)
 
         return None
@@ -185,7 +185,7 @@ class DAG:
         assert isinstance(task, Task), TypeError('start is not a dequindre Task')
         assert isinstance(depends_on, Task), TypeError('end is not a dequindre Task')
 
-        self.add_tasks([task, depends_on])
+        self.add_tasks({task, depends_on})
         self.edges[depends_on].add(task)
 
         # cycles can only be introduced here

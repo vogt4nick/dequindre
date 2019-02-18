@@ -16,7 +16,7 @@ def test__Dequindre_init_exceptions():
     C = Task('C.py', 'test-env')
 
     dag = DAG()
-    dag.add_tasks([A, B, C])
+    dag.add_tasks({A, B, C})
 
     with pytest.raises(TypeError):
         Dequindre()
@@ -33,7 +33,7 @@ def test__Dequindre_init():
     C = Task('C.py', 'test-env')
 
     dag = DAG()
-    dag.add_tasks([A, B, C])
+    dag.add_tasks({A, B, C})
     dq = Dequindre(dag)
 
     return None
@@ -52,7 +52,7 @@ def test__Dequindre_refresh_dag():
     B = Task('B.py', 'test-env')
     C = Task('C.py', 'test-env')
     dag = DAG()
-    dag.add_tasks([A, B, C])
+    dag.add_tasks({A, B, C})
     dq = Dequindre(dag)
 
     tasks = sorted(list(dq.dag.tasks))
@@ -74,7 +74,7 @@ def test__Dequindre_get_task_priorities():
     C = Task('C.py', 'test-env')
     Z = Task('Z.py', 'test-env')
     dag = DAG()
-    dag.add_tasks([A, B, C, Z])
+    dag.add_tasks({A, B, C, Z})
     dag.add_edges({A:B, B:C})
     dq = Dequindre(dag)
 
@@ -95,7 +95,7 @@ def test__Dequindre_get_priorities():
     C = Task('C.py', 'test-env')
     Z = Task('Z.py', 'test-env')
     dag = DAG()
-    dag.add_tasks([A, B, C, Z])
+    dag.add_tasks({A, B, C, Z})
     dag.add_edges({A:B, B:C})
     dq = Dequindre(dag)
 
