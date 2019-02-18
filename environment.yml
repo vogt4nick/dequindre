@@ -1,0 +1,11 @@
+name: dequindre-dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python    =3.6
+  - pip      >=18.1
+  - pytest   >=4.2, < 5.0
+  - sphinx   >=1.8, < 2.0
+  - pip:
+    - bump2version >=0.5.2, <0.6 
