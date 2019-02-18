@@ -1,9 +1,8 @@
 from setuptools import setup, find_packages
 
 version = {}
-with open('./dequindre/version.py', 'r') as ifile:
+with open('./dequindre/__init__.py', 'r') as ifile:
     exec(ifile.read(), version)
-
 
 setup(
     name='dequindre',
