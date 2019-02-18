@@ -34,7 +34,12 @@ def get_cyclic_graph():
 # ----------------------------------------------------------------------------
 @pytest.mark.run(order=2)
 def test__DAG_init():
-    assert isinstance(DAG(), DAG), 'DAG init failed'
+    DAG()
+
+    # init with dependencies
+    make_tea = Task('make_tea.py', 'test-env')
+    drink_tea = Task('drink_tea.py', 'test-env')
+    DAG(dependencies={drink_tea: make_tea})
 
 
 def test__DAG_repr():

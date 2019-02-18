@@ -115,10 +115,19 @@ class DAG:
         for users.
     """
 
-    def __init__(self):
+    def __init__(self, *, tasks: set = None, dependencies: dict = None):
         # check_conda()
         self.tasks = set()
         self.edges = defaultdict(set)
+
+        if tasks is not None:
+            assert isinstance(tasks, set), '`tasks` must be a set of tasks'
+            self.add_tasks(tasks)
+
+        if dependencies is not None:
+            assert isinstance(dependencies, dict), '`dependencies` must be a dict'
+            self.add_dependencies(dependencies)
+
         return None
     
 
