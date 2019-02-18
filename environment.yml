@@ -10,3 +10,4 @@ dependencies:
   - twine    >=1.13, < 2.0
   - pip:
     - bump2version >=0.5.2, <0.6 
+    - readme-renderer
