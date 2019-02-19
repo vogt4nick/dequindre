@@ -16,6 +16,9 @@ from subprocess import check_output, CalledProcessError
 from time import sleep
 
 
+__version__ = '0.4.0'
+
+
 class CyclicGraphError(Exception):
     pass
 
@@ -52,8 +55,7 @@ class Task:
         loc (str): location of the python script that runs the task.
         env (str): Which environment to run.
     """
-    def __init__(self, loc: str, env: str):
-        # check_conda()
+    def __init__(self, loc: str, env: str = 'base'):
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
@@ -338,8 +340,9 @@ class Dequindre:
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Define exception for when cycles are detected
     """
-    def __init__(self, dag: DAG):
-        check_conda()
+    def __init__(self, dag: DAG, *, validate_conda: bool = True):
+        if validate_conda:
+            check_conda()
         self.original_dag = dag
         self.refresh_dag()
 
