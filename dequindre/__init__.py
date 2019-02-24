@@ -16,7 +16,7 @@ from subprocess import check_output, CalledProcessError
 from time import sleep
 
 
-__version__ = '0.5.0.dev1'
+__version__ = '0.5.0.dev2'
 
 
 class CyclicGraphError(Exception):
@@ -212,6 +212,10 @@ class DAG:
         """Add dependency to DAG
         
         Examples:
+        >>> from dequindre import Task, DAG
+        >>> boil_water = Task('boil_water.py')
+        >>> steep_tea = Task('steep_tea.py')
+        >>> dag = DAG()
         >>> dag.add_dependency(steep_tea, depends_on=boil_water)
         """
         # error handling by add_tasks won't be clear to the user.
@@ -234,7 +238,12 @@ class DAG:
         """Add dependencies to DAG
         
         Examples:
-        >>> dag.add_dependencies({steep_tea: {boil_water, get_tea_leaves}})
+        >>> from dequindre import Task, DAG
+        >>> boil_water = Task('boil_water.py')
+        >>> prep_infuser = Task('prep_infuser.py')
+        >>> steep_tea = Task('steep_tea.py')
+        >>> dag = DAG()
+        >>> dag.add_dependencies({steep_tea: {boil_water, prep_infuser}})
         """
         for task, dependencies in d.items():
             if isinstance(dependencies, Task):
@@ -391,13 +400,10 @@ class Dequindre:
     def get_schedules(self) -> Dict[int, Set[Task]]:
         """Schedule tasks by priority level.
 
-        Example:
-            make_tea -> pour_tea -> drink_tea will give the dict
-            {
-                1: {make_tea},
-                2: {pour_tea},
-                3: {drink_tea}
-            }
+        For example, make_tea -> pour_tea -> drink_tea will give the dict
+            {1: {make_tea},
+             2: {pour_tea},
+             3: {drink_tea}}
         """
         priorities = defaultdict(set)
         task_priorities = self.get_task_schedules()
