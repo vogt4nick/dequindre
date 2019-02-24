@@ -16,7 +16,7 @@ from subprocess import check_output, CalledProcessError
 from time import sleep
 
 
-__version__ = '0.5.0.dev0'
+__version__ = '0.5.0.dev1'
 
 
 class CyclicGraphError(Exception):
@@ -360,8 +360,8 @@ class Dequindre:
         return None
 
 
-    def get_task_priorities(self) -> Dict[Task, int]:
-        """Define priority level for each task
+    def get_task_schedules(self) -> Dict[Task, int]:
+        """Define schedule priority level for each task
 
         Example:
             make_tea -> pour_tea -> drink_tea will give the dict
@@ -388,8 +388,8 @@ class Dequindre:
         return task_priority
 
 
-    def get_priorities(self) -> Dict[int, Set[Task]]:
-        """Define tasks for each priority level.
+    def get_schedules(self) -> Dict[int, Set[Task]]:
+        """Schedule tasks by priority level.
 
         Example:
             make_tea -> pour_tea -> drink_tea will give the dict
@@ -400,7 +400,7 @@ class Dequindre:
             }
         """
         priorities = defaultdict(set)
-        task_priorities = self.get_task_priorities()
+        task_priorities = self.get_task_schedules()
         for k, v in task_priorities.items():
             priorities[v].add(k)
 
@@ -425,7 +425,7 @@ class Dequindre:
     def run_tasks(self):
         """Run all tasks on the DAG"""
         self.refresh_dag()  # refresh just in case
-        priorities = self.get_priorities()
+        priorities = self.get_schedules()
 
         for k, tasks in priorities.items():
             for task in tasks:

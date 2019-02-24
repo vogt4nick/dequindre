@@ -68,7 +68,7 @@ def test__Dequindre_refresh_dag():
         assert t == nt
 
 
-def test__Dequindre_get_task_priorities():
+def test__Dequindre_get_task_schedules():
     A = Task('A.py', 'test-env')
     B = Task('B.py', 'test-env')
     C = Task('C.py', 'test-env')
@@ -78,7 +78,7 @@ def test__Dequindre_get_task_priorities():
     dag.add_edges({A:B, B:C})
     dq = Dequindre(dag)
 
-    priorities = dq.get_task_priorities()
+    priorities = dq.get_task_schedules()
 
     testable = {hash(k): v for k, v in priorities.items()}
     assert testable == {
@@ -89,7 +89,7 @@ def test__Dequindre_get_task_priorities():
     }
 
 
-def test__Dequindre_get_priorities():
+def test__Dequindre_get_schedules():
     A = Task('A.py', 'test-env')
     B = Task('B.py', 'test-env')
     C = Task('C.py', 'test-env')
@@ -99,7 +99,7 @@ def test__Dequindre_get_priorities():
     dag.add_edges({A:B, B:C})
     dq = Dequindre(dag)
 
-    priorities = dq.get_priorities()
+    priorities = dq.get_schedules()
     testable = {}
 
     # build a testable result dict
