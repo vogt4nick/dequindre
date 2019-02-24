@@ -16,7 +16,7 @@ from subprocess import check_output, CalledProcessError
 from time import sleep
 
 
-__version__ = '0.4.0'
+__version__ = '0.5.0.dev0'
 
 
 class CyclicGraphError(Exception):
@@ -120,7 +120,7 @@ class DAG:
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
         # check_conda()
         self.tasks = set()
-        self.edges = defaultdict(set)
+        self._edges = defaultdict(set)
 
         if tasks is not None:
             assert isinstance(tasks, set), '`tasks` must be a set of tasks'
@@ -174,11 +174,11 @@ class DAG:
         self.tasks.remove(task)
 
         # remove task from edges
-        for k in self.edges:
-            if task in self.edges[k]:
-                self.edges[k].remove(task)
-        if task in self.edges:
-            del self.edges[task]
+        for k in self._edges:
+            if task in self._edges[k]:
+                self._edges[k].remove(task)
+        if task in self._edges:
+            del self._edges[task]
 
         return None
 
@@ -190,7 +190,7 @@ class DAG:
         assert isinstance(end, Task), TypeError('end is not a dequindre Task')
 
         self.add_tasks({start, end})
-        self.edges[start].add(end)
+        self._edges[start].add(end)
 
         return None
 
@@ -219,7 +219,7 @@ class DAG:
         assert isinstance(depends_on, Task), TypeError('end is not a dequindre Task')
 
         self.add_tasks({task, depends_on})
-        self.edges[depends_on].add(task)
+        self._edges[depends_on].add(task)
 
         # cycles can only be introduced here
         if self.is_cyclic():
@@ -251,7 +251,7 @@ class DAG:
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks."""
         return defaultdict(set,
-            {k: v for k, v in self.edges.items() if len(v) > 0})
+            {k: v for k, v in self._edges.items() if len(v) > 0})
 
 
     def get_upstream(self) -> dict:
