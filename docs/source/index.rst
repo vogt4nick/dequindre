@@ -22,7 +22,7 @@ Quick Start
    >>> make_tea = DAG(dependencies={
    ...    boil_water: {pour_water},
    ...    steep_tea: {boil_water, prep_infuser}
-   ...})
+   ... })
    >>>
    >>> ## run tasks
    >>> dq = Dequindre(make_tea, validate_conda=False)
