@@ -37,7 +37,7 @@ Dequindre allows dynamic configuration with Python. By example, we may program t
 >>>
 >>> # run tasks
 >>> dq = Dequindre(dag, check_conda=False)
->>> dq = dq.get_priorities()
+>>> dq = dq.get_schedules()
 defaultdict(<class 'set'>, {
     1: {Task(make_tea.py), Task(prep_infuser.py)},
     2: {Task(boil_water.py)},

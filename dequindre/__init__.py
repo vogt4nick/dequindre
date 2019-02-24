@@ -360,7 +360,7 @@ class Dequindre:
         return None
 
 
-    def get_task_priorities(self) -> Dict[Task, int]:
+    def get_task_schedules(self) -> Dict[Task, int]:
         """Define priority level for each task
 
         Example:
@@ -388,7 +388,7 @@ class Dequindre:
         return task_priority
 
 
-    def get_priorities(self) -> Dict[int, Set[Task]]:
+    def get_schedules(self) -> Dict[int, Set[Task]]:
         """Define tasks for each priority level.
 
         Example:
@@ -400,7 +400,7 @@ class Dequindre:
             }
         """
         priorities = defaultdict(set)
-        task_priorities = self.get_task_priorities()
+        task_priorities = self.get_task_schedules()
         for k, v in task_priorities.items():
             priorities[v].add(k)
 
@@ -425,7 +425,7 @@ class Dequindre:
     def run_tasks(self):
         """Run all tasks on the DAG"""
         self.refresh_dag()  # refresh just in case
-        priorities = self.get_priorities()
+        priorities = self.get_schedules()
 
         for k, tasks in priorities.items():
             for task in tasks:
