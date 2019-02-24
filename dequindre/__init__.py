@@ -361,7 +361,7 @@ class Dequindre:
 
 
     def get_task_schedules(self) -> Dict[Task, int]:
-        """Define priority level for each task
+        """Define schedule priority level for each task
 
         Example:
             make_tea -> pour_tea -> drink_tea will give the dict
@@ -389,7 +389,7 @@ class Dequindre:
 
 
     def get_schedules(self) -> Dict[int, Set[Task]]:
-        """Define tasks for each priority level.
+        """Schedule tasks by priority level.
 
         Example:
             make_tea -> pour_tea -> drink_tea will give the dict
