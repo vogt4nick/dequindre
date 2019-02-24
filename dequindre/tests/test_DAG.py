@@ -82,7 +82,7 @@ def test__DAG_remove_task():
     assert dag.tasks == {B}, 'Test Task was not added to the DAG'
 
 # ----------------------------------------------------------------------------
-# DAG.edges
+# DAG._edges
 # ----------------------------------------------------------------------------
 @pytest.mark.run(order=2)
 def test__DAG_add_edge():
@@ -91,12 +91,12 @@ def test__DAG_add_edge():
     dag = DAG()
     dag.add_tasks({A, B})
     dag.add_edge(A, B)
-    assert dag.edges == {A: {B,}}, 'edge was not created'
+    assert dag._edges == {A: {B,}}, 'edge was not created'
 
     del dag 
     dag = DAG()
     dag.add_edge(A, B)
-    assert dag.edges == {A: {B,}}, 'edge Tasks were not added to DAG.tasks'
+    assert dag._edges == {A: {B,}}, 'edge Tasks were not added to DAG.tasks'
 
 
 @pytest.mark.run(order=2)
@@ -104,7 +104,7 @@ def test__DAG_edges():
     A, B = get_two_tasks()
     dag = DAG()
     dag.add_edges({A: B})
-    assert isinstance(dag.edges[A], set), 'edge dict value is not a set'
+    assert isinstance(dag._edges[A], set), 'edge dict value is not a set'
 
 # ----------------------------------------------------------------------------
 # add dependencies
@@ -113,7 +113,7 @@ def test__DAG_add_dependency():
     A, B = get_two_tasks()
     dag = DAG()
     dag.add_dependency(B, A)
-    assert dag.edges[A] == set([B])
+    assert dag._edges[A] == set([B])
 
 
 def test__DAG_add_dependency_detect_cycle():
@@ -129,12 +129,12 @@ def test__DAG_add_dependencies():
     C = Task('C.py', env='test-env')
     dag = DAG()
     dag.add_dependencies({B: A})
-    assert dag.edges[A] == set([B])
+    assert dag._edges[A] == set([B])
 
     dag = DAG()
     dag.add_dependencies({C: {A, B}})
-    assert dag.edges[A] == set([C])
-    assert dag.edges[B] == set([C])
+    assert dag._edges[A] == set([C])
+    assert dag._edges[B] == set([C])
 
 
 def test__DAG_add_dependency_detect_cycle():
