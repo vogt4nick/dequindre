@@ -17,7 +17,7 @@ setup(
     packages=["dequindre"],
     classifiers=[
         "Development Status :: 4 - Beta",
-        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent"
     ],
