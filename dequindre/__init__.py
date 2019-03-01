@@ -16,7 +16,7 @@ from subprocess import check_output, CalledProcessError
 from time import sleep
 
 
-__version__ = '0.5.1.dev0'
+__version__ = '0.6.0'
 
 
 class CyclicGraphError(Exception):
