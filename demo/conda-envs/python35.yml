@@ -1,6 +1,0 @@
-name: python35
-channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - python    =3.5
