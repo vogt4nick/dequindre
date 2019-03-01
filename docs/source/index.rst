@@ -1,5 +1,5 @@
 Dequindre /\_de-KWIN-der\_/ (n.): A minimalist scheduler.
-=======================================================
+=========================================================
 
 .. image:: https://img.shields.io/pypi/pyversions/dequindre.svg
     :alt: Supported Versions
@@ -29,28 +29,66 @@ Dequindre /\_de-KWIN-der\_/ (n.): A minimalist scheduler.
 ..     :alt: Count Open Issues
 ..     :target: https://pypi.org/project/dequindre/
 
-Dequindre is built for professionals with the most basic use-cases in mind.
-You can install and configure your first pipeline in minutes. Dequindre makes
-it easy to configure, test, and deploy workflows. It also functions as a
-learning tool for students and professionals without the time or resources to
-setup the requisite architecture for a full-featured scheduler.
 
-Inspired by the complexity of Airflow, Dequindre leans heavilty on three lines
-of the Zen of Python:
+Vision
+^^^^^^
 
-1. Explicit is better than implicit.
-2. Simple is better than complex.
-3. Readability counts.
+``dequindre`` aims to empower workflow automation for everyone. It's part of a 
+larger vision to teach the fundamentals and best practices to practicing and 
+aspiring data scientists and data engineers.
 
-From this starting point, Dequindre offers
 
-* No Python dependencies; no third-party bugs
-* Single-container deployment
-* Legible source code; fewer than 1000 lines
-* Fast, dynamic configuration
+What is dequindre?
+^^^^^^^^^^^^^^^^^^
 
-Guide
-^^^^^
+``dequindre`` is a minimalist scheduler you can use to:
+
+- quickly configure python workflows at home or at work,
+- run dependent tasks in separate python environments, and
+- learn the fundamentals and best practices of scheduling workflows.
+
+
+Basic Example
+^^^^^^^^^^^^^
+
+First, install ``dequindre`` with ``pip install dequindre``. Then, in the REPL or in a ``schedule.py`` file,  
+
+    >>> from dequindre import Task, DAG, Dequindre
+    >>>
+    >>> ## define tasks and environments
+    >>> pour_water = Task('pour_water.py)
+    >>> boil_water = Task('boil_water.py')
+    >>> prep_infuser = Task('prep_infuser.py)
+    >>> steep_tea = Task('steep_tea.py')
+    >>>
+    >>> ## define runtime dependencies
+    >>> make_tea = DAG(dependencies={
+    ...    boil_water: {pour_water},
+    ...    steep_tea: {boil_water, prep_infuser}
+    ... })
+    >>>
+    >>> ## run tasks
+    >>> dq = Dequindre(make_tea, validate_conda=False)
+    >>> dq.get_schedules()
+    defaultdict(<class 'set'>, {
+        1: {Task(prep_infuser.py), Task(pour_water.py)},  
+        2: {Task(boil_water.py)},  
+        3: {Task(steep_tea.py)}})
+
+
+Features
+^^^^^^^^
+
+- **Automated workflow scheduling**
+- **Run your Python tasks in any pre-defined environments**
+    - ``dequindre`` facilitates **virtualenv** and **conda** environments
+- **Supports dynamic workflow configuration** also seen in Airflow
+- **Cross-Python compatible**: Supports Python 2 and Python 3
+- **Cross-platform**: Windows and Unix style environments
+- **Documented** examples and configuration
+
+User Guide
+^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 2
