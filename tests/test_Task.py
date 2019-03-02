@@ -21,9 +21,6 @@ def test__Task_init():
     with pytest.raises(AssertionError):
         Task(loc=good_loc, env=None)
 
-    with pytest.raises(AssertionError):
-        Task(loc=good_loc, env='')
-
     Task(loc=good_loc)
     Task(loc=good_loc, env=good_env)
 
