@@ -250,6 +250,8 @@ class DAG:
     # ------------------------------------------------------------------------
     # Graph Utilities
     # ------------------------------------------------------------------------
+    # nested loops are easier to read here. If time-complexity becomes a 
+    # problem, the user clearly needs to use a full-featured scheduler
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks."""
         return defaultdict(set,
