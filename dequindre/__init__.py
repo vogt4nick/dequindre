@@ -74,17 +74,24 @@ class Task:
 
 
 class DAG:
-    """Defines a directed acyclic graph with tasks and directed edges. Not
-    obviously, a DAG may contain more than one graph. Also not obviously,
+    """Defines a directed acyclic graph with tasks and dependencies as nodes 
+    and directed edges respectively. 
+    
+    Not obviously, a DAG may contain more than one graph. Also not obviously,
     new Tasks defined by edges are automatically added to the set of tasks.
 
-    DAGs are instantiated without arguments.
+    Instantiation:
+        DAG(tasks: Set[Task], dependencies: Dict[Task, Set[Task]]) -> None:
+            You have the option to define all the tasks and dependencies at 
+            once if you prefer that syntax. 
 
     Attributes:
         tasks (Set[Task]): 
-            The set of all tasks.
+            The set of all tasks. Dequindre will try to run every task in
+            this attribute.
         _edges (Dict[Task, Set[Task]]): 
-            A dict of directed edges from one Task to a set of Tasks.
+            A dict of directed edges from one Task to a set of Tasks. Access 
+            directly at your own peril.
 
     Methods:
         add_task(task: Task) -> None:
@@ -92,11 +99,18 @@ class DAG:
         add_tasks(tasks: Set[Task]) -> None:
             Add multiple tasks to the DAG with no dependencies. 
         remove_task(task: Task) -> None:
-            Remove one task from the DAG with no dependencies.
+            Remove one task from the DAG. This also removes all dependencies
+            downstream and upstream of the task.
+        remove_tasks(tasks: Set[Task]) -> None:
+            Remove multiple tasks from the DAG with no dependencies. This also
+            removes all dependencies downstream and upstream of the task.
         add_dependency(task: Task, depends_on: Task) -> None:
-            Add a task dependency to the DAG.
+            Add a task dependency to the DAG. If either task does not yet 
+            exist in DAG, the task will automatically be added to the dag.
         add_dependencies(d: Dict[Task, Set[Task]]) -> None:
-            Add multiple task dependencies to the DAG.
+            Add multiple task dependencies to the DAG. If any task does not 
+            yet exist in DAG, the task will automatically be added to the 
+            dag.
         get_downstream() -> (Dict[Task, Set[Task]]): 
             Get the adjacency dict of downstream Tasks.
         get_upstream() -> (Dict[Task, Set[Task]]): 
@@ -105,11 +119,6 @@ class DAG:
             Get the set of all tasks with no upstream dependencies.
         get_sinks() -> (Set[Task]): 
             Get the set of all tasks with no downstream dependencies.
-    
-    Initiation:
-        DAG(tasks: Set[Task], dependencies: Dict[Task, Set[Task]]) -> None:
-            You have the option to define all the tasks and dependencies at 
-            once if you prefer that syntax. 
     """
 
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
@@ -160,8 +169,6 @@ class DAG:
 
     def remove_task(self, task: Task):
         """Remove task from the set of tasks and remove any related edges
-
-        TODO: Define remove_tasks
         """
         assert isinstance(task, Task), TypeError('task is not a dequindre Task')
 
@@ -176,6 +183,19 @@ class DAG:
 
         return None
 
+
+    def remove_tasks(self, tasks: set):
+        """Remove multiple tasks from the set of tasks
+
+        TODO: Handle iterables
+        TODO: Handle non-iterables
+        """
+        assert isinstance(tasks, set), TypeError('tasks is not a set')
+
+        for t in tasks:
+            self.remove_task(t)
+
+        return None
 
     def add_dependency(self, task: Task, depends_on: Task):
         """Add dependency to DAG
