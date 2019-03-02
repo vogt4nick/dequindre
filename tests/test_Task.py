@@ -5,7 +5,6 @@ import pytest
 from dequindre import Task
 
 
-@pytest.mark.run(order=1)
 def test__Task_init():
     good_loc = 'path/to/file.py'
     good_env = 'test-env'

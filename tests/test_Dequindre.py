@@ -7,7 +7,6 @@ import pytest
 from dequindre import Task, DAG, Dequindre
 
 
-@pytest.mark.run(order=1)
 def test__Dequindre_init_exceptions():
     """Raise expected exceptions
     """
@@ -24,7 +23,6 @@ def test__Dequindre_init_exceptions():
     return None
 
 
-@pytest.mark.run(order=2)
 def test__Dequindre_init():
     """Nothing should break here
     """
