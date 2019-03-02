@@ -21,6 +21,17 @@ Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](http
 - run dependent tasks in separate python environments, and
 - learn the fundamentals and best practices of scheduling workflows.
 
+## Features
+
+- **Automated workflow scheduling**
+- **Run your Python tasks in any pre-defined environments**
+  - `dequindre` facilitates **virtualenv** and **conda** environments
+- **Supports dynamic workflow configuration** also seen in Airflow
+- **Pure Python**: Relies entirely from Python built-ins.
+- **Cross-Python compatible**: Supports Python 2 and Python 3
+- **Cross-platform**: Windows and Unix style environments
+- **Documented** examples and configuration
+
 ## Basic Example
 
 First, install `dequindre` with `pip install dequindre`. Then, in the
@@ -49,15 +60,6 @@ defaultdict(<class 'set'>, {
     2: {Task(boil_water.py)},  
     3: {Task(steep_tea.py)}})
 ```
-## Features
-
-- **Automated workflow scheduling**
-- **Run your Python tasks in any pre-defined environments**
-  - `dequindre` facilitates **virtualenv** and **conda** environments
-- **Supports dynamic workflow configuration** also seen in Airflow
-- **Cross-Python compatible**: Supports Python 2 and Python 3
-- **Cross-platform**: Windows and Unix style environments
-- **Documented** examples and configuration
 
 ## Getting Started
 

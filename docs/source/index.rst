@@ -48,6 +48,19 @@ What is dequindre?
 - learn the fundamentals and best practices of scheduling workflows.
 
 
+Features
+^^^^^^^^
+
+- **Automated workflow scheduling**
+- **Run your Python tasks in any pre-defined environments**
+    - ``dequindre`` facilitates **virtualenv** and **conda** environments
+- **Supports dynamic workflow configuration** also seen in Airflow
+- **Pure Python**: Relies entirely from Python built-ins.
+- **Cross-Python compatible**: Supports Python 2 and Python 3
+- **Cross-platform**: Windows and Unix style environments
+- **Documented** examples and configuration
+
+
 Basic Example
 ^^^^^^^^^^^^^
 
@@ -74,18 +87,6 @@ First, install ``dequindre`` with ``pip install dequindre``. Then, in the REPL o
         1: {Task(prep_infuser.py), Task(pour_water.py)},  
         2: {Task(boil_water.py)},  
         3: {Task(steep_tea.py)}})
-
-
-Features
-^^^^^^^^
-
-- **Automated workflow scheduling**
-- **Run your Python tasks in any pre-defined environments**
-    - ``dequindre`` facilitates **virtualenv** and **conda** environments
-- **Supports dynamic workflow configuration** also seen in Airflow
-- **Cross-Python compatible**: Supports Python 2 and Python 3
-- **Cross-platform**: Windows and Unix style environments
-- **Documented** examples and configuration
 
 User Guide
 ^^^^^^^^^^
