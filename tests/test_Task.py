@@ -7,7 +7,7 @@ from dequindre import Task
 
 def test__Task_init():
     good_loc = 'path/to/file.py'
-    good_env = 'test-env'
+    good_env = 'python'
 
     with pytest.raises(TypeError):
         Task()

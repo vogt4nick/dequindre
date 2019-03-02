@@ -15,7 +15,7 @@ from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
 
 
-__version__ = '0.7.0'
+__version__ = '0.8.0'
 
 
 class CyclicGraphError(Exception):
@@ -30,7 +30,7 @@ class Task:
         loc (str): location of the python script that runs the task.
         env (str): Which environment to run.
     """
-    def __init__(self, loc: str, env: str = 'base'):
+    def __init__(self, loc: str, env: str = 'python'):
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
