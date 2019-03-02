@@ -84,12 +84,6 @@ class DAG:
         tasks (Set[Task]): The set of all tasks. Need not
         edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
             to a set of Tasks.
-
-    TODO: The DAG should catch cycles before they get to Dequindre.
-    TODO: Consider defining edges at instantiation.
-    TODO: Define edges as downstream: upstream.
-    TODO: Consider renaming "edge" to dependency or something more intuitive
-        for users.
     """
 
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
