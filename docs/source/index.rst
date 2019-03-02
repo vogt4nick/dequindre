@@ -30,12 +30,12 @@ Dequindre /\_de-KWIN-der\_/ (n.): A minimalist scheduler.
 ..     :target: https://pypi.org/project/dequindre/
 
 
-Vision
-^^^^^^
+Vision: Simplify Workflow Automation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``dequindre`` aims to empower workflow automation for everyone. It's part of a 
-larger vision to teach the fundamentals and best practices to practicing and 
-aspiring data scientists and data engineers.
+``dequindre`` aims to simplify workflow automation. It is part of a larger 
+vision to teach the fundamentals and best practices to practicing and aspiring
+data scientists and data engineers.
 
 
 What is dequindre?
@@ -46,6 +46,19 @@ What is dequindre?
 - quickly configure python workflows at home or at work,
 - run dependent tasks in separate python environments, and
 - learn the fundamentals and best practices of scheduling workflows.
+
+
+Features
+^^^^^^^^
+
+- **Automated workflow scheduling**
+- **Run your Python tasks in any pre-defined environments**
+    - ``dequindre`` facilitates **virtualenv**, **conda**, and **pipenv** environments
+- **Supports dynamic workflow configuration** also seen in Airflow
+- **Pure Python**: Relies entirely from Python built-ins.
+- **Cross-Python compatible**: Supports Python 2 and Python 3
+- **Cross-platform**: Windows and Unix style environments
+- **Documented** examples and configuration
 
 
 Basic Example
@@ -74,18 +87,6 @@ First, install ``dequindre`` with ``pip install dequindre``. Then, in the REPL o
         1: {Task(prep_infuser.py), Task(pour_water.py)},  
         2: {Task(boil_water.py)},  
         3: {Task(steep_tea.py)}})
-
-
-Features
-^^^^^^^^
-
-- **Automated workflow scheduling**
-- **Run your Python tasks in any pre-defined environments**
-    - ``dequindre`` facilitates **virtualenv** and **conda** environments
-- **Supports dynamic workflow configuration** also seen in Airflow
-- **Cross-Python compatible**: Supports Python 2 and Python 3
-- **Cross-platform**: Windows and Unix style environments
-- **Documented** examples and configuration
 
 User Guide
 ^^^^^^^^^^

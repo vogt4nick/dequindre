@@ -13,38 +13,13 @@ import os
 from typing import Dict, Set
 from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
-from time import sleep
 
 
-__version__ = '0.6.1.dev0'
+__version__ = '0.7.0'
 
 
 class CyclicGraphError(Exception):
     pass
-
-
-class CondaVersionError(Exception):
-    pass
-
-
-def check_conda():
-    """Verify the machine has a version of conda capable of using `run`. 
-
-    `conda run -n base python 'print("test")'` 
-    """
-    host_version = check_output('conda --version', shell=True).decode().strip()
-    cmd = """ conda run -n base python -c 'print("test...")' """
-    try:
-        check_output(cmd, shell=True)
-    except CalledProcessError:
-        msg = (
-            """Your version of conda does not support the 'conda run' """
-            f"""function. Your machine has {host_version} installed. """
-            """You must upgrade to upgrade to conda >=4.6 to use dequindre."""
-        )
-        raise CondaVersionError(msg)
-
-
 class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
     are equal.
@@ -73,9 +48,9 @@ class Task:
         env = self.env
         hash_str = '-'.join((loc, env))
         big_int = int(md5(hash_str.encode()).hexdigest(), 16)
-        
+
         return big_int
-    
+
 
     def __eq__(self, other: 'Task') -> bool:
         if not isinstance(other, type(self)):
@@ -99,26 +74,54 @@ class Task:
 
 
 class DAG:
-    """Defines a directed acyclic graph with tasks and directed edges. Not
-    obviously, a DAG may contain more than one graph. Also not obviously,
+    """Defines a directed acyclic graph with tasks and dependencies as nodes
+    and directed edges respectively.
+
+    Not obviously, a DAG may contain more than one graph. Also not obviously,
     new Tasks defined by edges are automatically added to the set of tasks.
 
-    DAGs are instantiated without arguments.
+    Instantiation:
+        DAG(tasks: Set[Task], dependencies: Dict[Task, Set[Task]]) -> None:
+            You have the option to define all the tasks and dependencies at
+            once if you prefer that syntax.
 
     Attributes:
-        tasks (Set[Task]): The set of all tasks. Need not
-        edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
-            to a set of Tasks.
+        tasks (Set[Task]):
+            The set of all tasks. Dequindre will try to run every task in
+            this attribute.
+        _edges (Dict[Task, Set[Task]]):
+            A dict of directed edges from one Task to a set of Tasks. Access
+            directly at your own peril.
 
-    TODO: The DAG should catch cycles before they get to Dequindre.
-    TODO: Consider defining edges at instantiation.
-    TODO: Define edges as downstream: upstream.
-    TODO: Consider renaming "edge" to dependency or something more intuitive
-        for users.
+    Methods:
+        add_task(task: Task) -> None:
+            Add one task to the DAG with no dependencies.
+        add_tasks(tasks: Set[Task]) -> None:
+            Add multiple tasks to the DAG with no dependencies.
+        remove_task(task: Task) -> None:
+            Remove one task from the DAG. This also removes all dependencies
+            downstream and upstream of the task.
+        remove_tasks(tasks: Set[Task]) -> None:
+            Remove multiple tasks from the DAG with no dependencies. This also
+            removes all dependencies downstream and upstream of the task.
+        add_dependency(task: Task, depends_on: Task) -> None:
+            Add a task dependency to the DAG. If either task does not yet
+            exist in DAG, the task will automatically be added to the dag.
+        add_dependencies(d: Dict[Task, Set[Task]]) -> None:
+            Add multiple task dependencies to the DAG. If any task does not
+            yet exist in DAG, the task will automatically be added to the
+            dag.
+        get_downstream() -> (Dict[Task, Set[Task]]):
+            Get the adjacency dict of downstream Tasks.
+        get_upstream() -> (Dict[Task, Set[Task]]):
+            Get the adjacency dict of upstream Tasks.
+        get_sources() -> (Set(Task)):
+            Get the set of all tasks with no upstream dependencies.
+        get_sinks() -> (Set[Task]):
+            Get the set of all tasks with no downstream dependencies.
     """
 
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
-        # check_conda()
         self.tasks = set()
         self._edges = defaultdict(set)
 
@@ -131,7 +134,7 @@ class DAG:
             self.add_dependencies(dependencies)
 
         return None
-    
+
 
     def __repr__(self):
         if self.tasks:
@@ -151,12 +154,14 @@ class DAG:
 
 
     def add_tasks(self, tasks: set):
-        """Add multiple tasks to the set of tasks
+        """Add multiple tasks to the set of tasks"""
+        assert isinstance(tasks, (set, Task)), TypeError('tasks is not a set')
 
-        TODO: Handle iterables
-        TODO: Handle non-iterables
-        """
-        assert isinstance(tasks, set), TypeError('tasks is not a set')
+        if isinstance(tasks, Task):
+            task = tasks
+            self.add_task(task)
+
+            return None
 
         for t in tasks:
             self.add_task(t)
@@ -166,8 +171,6 @@ class DAG:
 
     def remove_task(self, task: Task):
         """Remove task from the set of tasks and remove any related edges
-
-        TODO: Define remove_tasks
         """
         assert isinstance(task, Task), TypeError('task is not a dequindre Task')
 
@@ -183,34 +186,24 @@ class DAG:
         return None
 
 
-    def add_edge(self, start: Task, end:Task):
-        """Add directed edge to DAG"""
-        # error handling by add_tasks won't be clear to the user.
-        assert isinstance(start, Task), TypeError('start is not a dequindre Task')
-        assert isinstance(end, Task), TypeError('end is not a dequindre Task')
+    def remove_tasks(self, tasks: set):
+        """Remove multiple tasks from the set of tasks"""
+        assert isinstance(tasks, (set, Task)), TypeError('tasks is not a set')
 
-        self.add_tasks({start, end})
-        self._edges[start].add(end)
+        if isinstance(tasks, Task):
+            task = tasks
+            self.remove_task(task)
 
-        return None
+            return None
 
-
-    def add_edges(self, d: dict):
-        """Add directed edges to the DAG"""
-        for k, v in d.items():
-            if isinstance(v, Task):
-                self.add_edge(k, v)
-                continue
-            elif isinstance(v, set):
-                for vi in v:
-                    self.add_edge(k, vi)
+        for t in tasks:
+            self.remove_task(t)
 
         return None
-
 
     def add_dependency(self, task: Task, depends_on: Task):
         """Add dependency to DAG
-        
+
         Examples:
         >>> from dequindre import Task, DAG
         >>> boil_water = Task('boil_water.py')
@@ -232,11 +225,11 @@ class DAG:
             raise CyclicGraphError(msg)
 
         return None
-    
-    
+
+
     def add_dependencies(self, d: Dict[Task, Set[Task]]):
         """Add dependencies to DAG
-        
+
         Examples:
         >>> from dequindre import Task, DAG
         >>> boil_water = Task('boil_water.py')
@@ -247,7 +240,7 @@ class DAG:
         """
         for task, dependencies in d.items():
             if isinstance(dependencies, Task):
-                dependency = dependencies 
+                dependency = dependencies
                 self.add_dependency(task, dependency)
                 continue
             elif isinstance(dependencies, set):
@@ -257,6 +250,8 @@ class DAG:
     # ------------------------------------------------------------------------
     # Graph Utilities
     # ------------------------------------------------------------------------
+    # nested loops are easier to read here. If time-complexity becomes a 
+    # problem, the user clearly needs to use a full-featured scheduler
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks."""
         return defaultdict(set,
@@ -349,14 +344,12 @@ class Dequindre:
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Define exception for when cycles are detected
     """
-    def __init__(self, dag: DAG, *, validate_conda: bool = True):
-        if validate_conda:
-            check_conda()
+    def __init__(self, dag: DAG):
         self.original_dag = dag
         self.refresh_dag()
 
         return None
-    
+
 
     def __repr__(self):
         return f"{Dequindre.__qualname__}({self.dag})"
@@ -421,9 +414,7 @@ class Dequindre:
             ValueError(f'{task} is not in the dag')
 
         print(f'\nRunning {repr(task)}\n')
-        r = subprocess_run(
-            f'conda run -n {task.env} python {task.loc}',
-            shell=True, check=True)
+        r = subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
 
         return None
 
@@ -439,4 +430,3 @@ class Dequindre:
                     self.run_task(task)
                 except Exception as err:
                     print(err)
-                sleep(1)

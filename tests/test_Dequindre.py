@@ -7,7 +7,6 @@ import pytest
 from dequindre import Task, DAG, Dequindre
 
 
-@pytest.mark.run(order=1)
 def test__Dequindre_init_exceptions():
     """Raise expected exceptions
     """
@@ -24,7 +23,6 @@ def test__Dequindre_init_exceptions():
     return None
 
 
-@pytest.mark.run(order=2)
 def test__Dequindre_init():
     """Nothing should break here
     """
@@ -75,7 +73,7 @@ def test__Dequindre_get_task_schedules():
     Z = Task('Z.py', 'test-env')
     dag = DAG()
     dag.add_tasks({A, B, C, Z})
-    dag.add_edges({A:B, B:C})
+    dag.add_dependencies({B:A, C:B})
     dq = Dequindre(dag)
 
     priorities = dq.get_task_schedules()
@@ -96,7 +94,7 @@ def test__Dequindre_get_schedules():
     Z = Task('Z.py', 'test-env')
     dag = DAG()
     dag.add_tasks({A, B, C, Z})
-    dag.add_edges({A:B, B:C})
+    dag.add_dependencies({B:A, C:B})
     dq = Dequindre(dag)
 
     priorities = dq.get_schedules()

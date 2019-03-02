@@ -1,66 +1,71 @@
 
-# Dequindre /_de-KWIN-der_/ (n.): A minimalist scheduler. 
+# Dequindre /\_de-KWIN-der\_/ (n.): A minimalist scheduler.
 
-Dequindre is built for professionals with the most basic use-cases in mind. You can install and configure your first pipeline in minutes. Dequindre makes it easy to configure, test, and deploy workflows. It also functions as a learning tool for students and professionals without the time or resources to setup the requisite architecture for a full-featured scheduler.
+[![Supported
+Versions](https://img.shields.io/pypi/pyversions/dequindre.svg)](https://pypi.org/project/dequindre/)
+[![Documentation](https://img.shields.io/readthedocs/dequindre.svg)](https://dequindre.readthedocs.io/en/latest/)
+[![Version](https://img.shields.io/pypi/v/dequindre.svg?color=blue)](https://pypi.org/project/dequindre/)
+[![Last
+Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](https://github.com/vogt4nick/dequindre)
+[![License](https://img.shields.io/pypi/l/dequindre.svg?color=red)](https://pypi.org/project/dequindre/)
 
-Inspired by the complexity of Airflow, Dequindre is build on three design pillars:
+---
 
-1. The schedule should be human readable and optimizable.  
-2. Tasks should fail loudly and clearly.  
-3. 80% of the work can be done with the bare-essential features.  
+## Vision: Simplify Workflow Automation
 
-Dequindre offers
+`dequindre` aims to simplify workflow automation. It is part of a larger vision to teach the fundamentals and best practices to practicing and aspiring data scientists and data engineers.
 
-* No Python dependencies; no third-party bugs
-* Single-container deployment
-* Legible source code; fewer than 1000 lines
-* Fast, dynamic configuration
+## What is dequindre?
 
-# Usage
+`dequindre` is a minimalist scheduler you can use to:
 
-Dequindre allows dynamic configuration with Python. By example, we may program the process to make tea as  
+- quickly configure python workflows at home or at work,
+- run dependent tasks in separate python environments, and
+- learn the fundamentals and best practices of scheduling workflows.
 
-```usage
+## Features
+
+- **Automated workflow scheduling**
+- **Run your Python tasks in any pre-defined environments**
+  - `dequindre` facilitates **virtualenv**, **conda**, and **pipenv** environments
+- **Supports dynamic workflow configuration** also seen in Airflow
+- **Pure Python**: Relies entirely from Python built-ins.
+- **Cross-Python compatible**: Supports Python 2 and Python 3
+- **Cross-platform**: Windows and Unix style environments
+- **Documented** examples and configuration
+
+## Basic Example
+
+First, install `dequindre` with `pip install dequindre`. Then, in the
+REPL or in a `schedule.py` file,
+
+```basic-example
 >>> from dequindre import Task, DAG, Dequindre
 >>>
->>> # define tasks and environments
->>> pour_water = Task('pour_water.py, env='kitchen')
->>> boil_water = Task('boil_water.py', env='microwave')
->>> prep_infuser = Task('prep_infuser.py', env='kitchen')
->>> steep_tea = Task('steep_tea.py', env='kitchen')
+>>> ## define tasks and environments
+>>> pour_water = Task('pour_water.py)
+>>> boil_water = Task('boil_water.py')
+>>> prep_infuser = Task('prep_infuser.py)
+>>> steep_tea = Task('steep_tea.py')
 >>>
->>> # define runtime dependencies
+>>> ## define runtime dependencies
 >>> make_tea = DAG(dependencies={
 ...    boil_water: {pour_water},
 ...    steep_tea: {boil_water, prep_infuser}
-...})
+... })
 >>>
->>> # run tasks
->>> dq = Dequindre(dag, check_conda=False)
->>> dq = dq.get_schedules()
+>>> ## run tasks
+>>> dq = Dequindre(make_tea, validate_conda=False)
+>>> dq.get_schedules()
 defaultdict(<class 'set'>, {
-    1: {Task(make_tea.py), Task(prep_infuser.py)},
-    2: {Task(boil_water.py)},
-    3: {Task(steep_tea.py)}
-})
->>> dq.run_tasks()
-...
+    1: {Task(prep_infuser.py), Task(pour_water.py)},  
+    2: {Task(boil_water.py)},  
+    3: {Task(steep_tea.py)}})
 ```
-
-`dq.run_tasks()` looks at the priorities and runs `conda run -n ENVIRONMENT python PATH` under the hood.
 
 ## Getting Started
 
-Dequindre has two requirements: conda and python.
-
-### Prerequisites
-
-Dequindre relies on [conda >=4.6](https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html) to run tasks in different environments.  
-
-```conda-version
-$ conda --version
-conda 4.6.4
-```
+Dequindre is has two requirements: conda and python.
 
 ### Installing
 
@@ -73,24 +78,6 @@ $ pip install dequindre
 If you're interested in contributing to Dequindre, [raise an issue](https://github.com/vogt4nick/dequindre/issues), make a pull request to `dev`, and reach out to the author, vogt4nick.
 
 Please read [contributing.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-### Running the tests
-
-Dequindre's tests are currently written entirely with the `pytest` module. Navigate to the repo's directory on your system and use the `pytest` command. Output should resemble
-
-```pytest
-$ pytest
-============================= test session starts =============================
-platform win32 -- Python 3.6.6, pytest-4.2.1, py-1.7.0, pluggy-0.8.1
-rootdir: C:\Users\Nick.Vogt\Projects\repos\dequindre, inifile:
-collected 25 items
-
-dequindre\tests\test_DAG.py ...............                              [ 60%]
-dequindre\tests\test_Dequindre.py ......                                 [ 84%]
-dequindre\tests\test_Task.py ....                                        [100%]
-
-========================== 25 passed in 4.14 seconds ==========================
-```
 
 ## Versioning
 
