@@ -13,7 +13,6 @@ import os
 from typing import Dict, Set
 from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
-from time import sleep
 
 
 __version__ = '0.7.0.dev0'
@@ -410,4 +409,3 @@ class Dequindre:
                     self.run_task(task)
                 except Exception as err:
                     print(err)
-                sleep(1)
