@@ -21,30 +21,6 @@ __version__ = '0.7.0.dev0'
 
 class CyclicGraphError(Exception):
     pass
-
-
-class CondaVersionError(Exception):
-    pass
-
-
-def check_conda():
-    """Verify the machine has a version of conda capable of using `run`. 
-
-    `conda run -n base python 'print("test")'` 
-    """
-    host_version = check_output('conda --version', shell=True).decode().strip()
-    cmd = """ conda run -n base python -c 'print("test...")' """
-    try:
-        check_output(cmd, shell=True)
-    except CalledProcessError:
-        msg = (
-            """Your version of conda does not support the 'conda run' """
-            f"""function. Your machine has {host_version} installed. """
-            """You must upgrade to upgrade to conda >=4.6 to use dequindre."""
-        )
-        raise CondaVersionError(msg)
-
-
 class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
     are equal.
@@ -118,7 +94,6 @@ class DAG:
     """
 
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
-        # check_conda()
         self.tasks = set()
         self._edges = defaultdict(set)
 
@@ -349,9 +324,7 @@ class Dequindre:
     TODO: The DAG should catch cycles before they get to Dequindre.
     TODO: Define exception for when cycles are detected
     """
-    def __init__(self, dag: DAG, *, validate_conda: bool = True):
-        if validate_conda:
-            check_conda()
+    def __init__(self, dag: DAG):
         self.original_dag = dag
         self.refresh_dag()
 
