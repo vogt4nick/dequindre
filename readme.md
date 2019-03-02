@@ -9,11 +9,9 @@ Versions](https://img.shields.io/pypi/pyversions/dequindre.svg)](https://pypi.or
 Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](https://github.com/vogt4nick/dequindre)
 [![License](https://img.shields.io/pypi/l/dequindre.svg?color=red)](https://pypi.org/project/dequindre/)
 
-## Vision
+## Vision: Simplify Workflow Automation
 
-`dequindre` aims to empower workflow automation for everyone. It's part
-of a larger vision to teach the fundamentals and best practices to
-practicing and aspiring data scientists and data engineers.
+`dequindre` aims to simplify workflow automation. It is part of a larger vision to teach the fundamentals and best practices to practicing and aspiring data scientists and data engineers.
 
 ## What is dequindre?
 
