@@ -46,11 +46,15 @@ def test__DAG_add_task():
 
 def test__DAG_add_tasks():
     A, B = get_two_tasks()
-
+    C = Task('C.py')
     dag = DAG()
     dag.add_tasks({A, B})
 
     assert dag.tasks == {A,B}, 'Test Tasks were not added to the DAG'
+
+    dag.add_tasks(C)
+
+    assert dag.tasks == {A,B,C}
 
 
 def test__DAG_remove_task():

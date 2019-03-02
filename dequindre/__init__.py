@@ -154,12 +154,14 @@ class DAG:
 
 
     def add_tasks(self, tasks: set):
-        """Add multiple tasks to the set of tasks
+        """Add multiple tasks to the set of tasks"""
+        assert isinstance(tasks, (set, Task)), TypeError('tasks is not a set')
 
-        TODO: Handle iterables
-        TODO: Handle non-iterables
-        """
-        assert isinstance(tasks, set), TypeError('tasks is not a set')
+        if isinstance(tasks, Task):
+            task = tasks
+            self.add_task(task)
+
+            return None
 
         for t in tasks:
             self.add_task(t)
@@ -185,11 +187,7 @@ class DAG:
 
 
     def remove_tasks(self, tasks: set):
-        """Remove multiple tasks from the set of tasks
-
-        TODO: Handle iterables
-        TODO: Handle non-iterables
-        """
+        """Remove multiple tasks from the set of tasks"""
         assert isinstance(tasks, (set, Task)), TypeError('tasks is not a set')
 
         if isinstance(tasks, Task):
