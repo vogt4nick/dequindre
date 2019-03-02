@@ -27,7 +27,7 @@ Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](http
 
 - **Automated workflow scheduling**
 - **Run your Python tasks in any pre-defined environments**
-  - `dequindre` facilitates **virtualenv** and **conda** environments
+  - `dequindre` facilitates **virtualenv**, **conda**, and **pipenv** environments
 - **Supports dynamic workflow configuration** also seen in Airflow
 - **Pure Python**: Relies entirely from Python built-ins.
 - **Cross-Python compatible**: Supports Python 2 and Python 3
