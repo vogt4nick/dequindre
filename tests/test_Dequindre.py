@@ -75,7 +75,7 @@ def test__Dequindre_get_task_schedules():
     Z = Task('Z.py', 'test-env')
     dag = DAG()
     dag.add_tasks({A, B, C, Z})
-    dag.add_edges({A:B, B:C})
+    dag.add_dependencies({B:A, C:B})
     dq = Dequindre(dag)
 
     priorities = dq.get_task_schedules()
@@ -96,7 +96,7 @@ def test__Dequindre_get_schedules():
     Z = Task('Z.py', 'test-env')
     dag = DAG()
     dag.add_tasks({A, B, C, Z})
-    dag.add_edges({A:B, B:C})
+    dag.add_dependencies({B:A, C:B})
     dq = Dequindre(dag)
 
     priorities = dq.get_schedules()

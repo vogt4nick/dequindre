@@ -82,8 +82,13 @@ class DAG:
 
     Attributes:
         tasks (Set[Task]): The set of all tasks. Need not
-        edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
+        _edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
             to a set of Tasks.
+
+    Methods:
+        add_task
+        add_tasks
+        remove_task
     """
 
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
@@ -147,31 +152,6 @@ class DAG:
                 self._edges[k].remove(task)
         if task in self._edges:
             del self._edges[task]
-
-        return None
-
-
-    def add_edge(self, start: Task, end:Task):
-        """Add directed edge to DAG"""
-        # error handling by add_tasks won't be clear to the user.
-        assert isinstance(start, Task), TypeError('start is not a dequindre Task')
-        assert isinstance(end, Task), TypeError('end is not a dequindre Task')
-
-        self.add_tasks({start, end})
-        self._edges[start].add(end)
-
-        return None
-
-
-    def add_edges(self, d: dict):
-        """Add directed edges to the DAG"""
-        for k, v in d.items():
-            if isinstance(v, Task):
-                self.add_edge(k, v)
-                continue
-            elif isinstance(v, set):
-                for vi in v:
-                    self.add_edge(k, vi)
 
         return None
 
