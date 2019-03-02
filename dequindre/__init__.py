@@ -421,9 +421,7 @@ class Dequindre:
             ValueError(f'{task} is not in the dag')
 
         print(f'\nRunning {repr(task)}\n')
-        r = subprocess_run(
-            f'conda run -n {task.env} python {task.loc}',
-            shell=True, check=True)
+        r = subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
 
         return None
 
