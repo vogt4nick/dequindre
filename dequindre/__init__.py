@@ -30,10 +30,11 @@ class Task:
         loc (str): location of the python script that runs the task.
         env (str): Which environment to run.
     """
-    def __init__(self, loc: str, env: str = ''):
+    def __init__(self, loc: str, env: str = 'python'):
         assert isinstance(loc, str), 'loc must be a str'
         assert len(loc) > 0, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
+        assert len(env) > 0, 'env cannot be an empty string'
 
         self.loc = loc
         self.env = env
