@@ -3,14 +3,10 @@
 
 [![Supported
 Versions](https://img.shields.io/pypi/pyversions/dequindre.svg)](https://pypi.org/project/dequindre/)
-
 [![Documentation](https://img.shields.io/readthedocs/dequindre.svg)](https://dequindre.readthedocs.io/en/latest/)
-
 [![Version](https://img.shields.io/pypi/v/dequindre.svg?color=blue)](https://pypi.org/project/dequindre/)
-
 [![Last
 Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](https://github.com/vogt4nick/dequindre)
-
 [![License](https://img.shields.io/pypi/l/dequindre.svg?color=red)](https://pypi.org/project/dequindre/)
 
 ## Vision
