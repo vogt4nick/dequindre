@@ -48,9 +48,9 @@ class Task:
         env = self.env
         hash_str = '-'.join((loc, env))
         big_int = int(md5(hash_str.encode()).hexdigest(), 16)
-        
+
         return big_int
-    
+
 
     def __eq__(self, other: 'Task') -> bool:
         if not isinstance(other, type(self)):
@@ -74,30 +74,30 @@ class Task:
 
 
 class DAG:
-    """Defines a directed acyclic graph with tasks and dependencies as nodes 
-    and directed edges respectively. 
-    
+    """Defines a directed acyclic graph with tasks and dependencies as nodes
+    and directed edges respectively.
+
     Not obviously, a DAG may contain more than one graph. Also not obviously,
     new Tasks defined by edges are automatically added to the set of tasks.
 
     Instantiation:
         DAG(tasks: Set[Task], dependencies: Dict[Task, Set[Task]]) -> None:
-            You have the option to define all the tasks and dependencies at 
-            once if you prefer that syntax. 
+            You have the option to define all the tasks and dependencies at
+            once if you prefer that syntax.
 
     Attributes:
-        tasks (Set[Task]): 
+        tasks (Set[Task]):
             The set of all tasks. Dequindre will try to run every task in
             this attribute.
-        _edges (Dict[Task, Set[Task]]): 
-            A dict of directed edges from one Task to a set of Tasks. Access 
+        _edges (Dict[Task, Set[Task]]):
+            A dict of directed edges from one Task to a set of Tasks. Access
             directly at your own peril.
 
     Methods:
         add_task(task: Task) -> None:
             Add one task to the DAG with no dependencies.
         add_tasks(tasks: Set[Task]) -> None:
-            Add multiple tasks to the DAG with no dependencies. 
+            Add multiple tasks to the DAG with no dependencies.
         remove_task(task: Task) -> None:
             Remove one task from the DAG. This also removes all dependencies
             downstream and upstream of the task.
@@ -105,19 +105,19 @@ class DAG:
             Remove multiple tasks from the DAG with no dependencies. This also
             removes all dependencies downstream and upstream of the task.
         add_dependency(task: Task, depends_on: Task) -> None:
-            Add a task dependency to the DAG. If either task does not yet 
+            Add a task dependency to the DAG. If either task does not yet
             exist in DAG, the task will automatically be added to the dag.
         add_dependencies(d: Dict[Task, Set[Task]]) -> None:
-            Add multiple task dependencies to the DAG. If any task does not 
-            yet exist in DAG, the task will automatically be added to the 
+            Add multiple task dependencies to the DAG. If any task does not
+            yet exist in DAG, the task will automatically be added to the
             dag.
-        get_downstream() -> (Dict[Task, Set[Task]]): 
+        get_downstream() -> (Dict[Task, Set[Task]]):
             Get the adjacency dict of downstream Tasks.
-        get_upstream() -> (Dict[Task, Set[Task]]): 
+        get_upstream() -> (Dict[Task, Set[Task]]):
             Get the adjacency dict of upstream Tasks.
-        get_sources() -> (Set(Task)): 
+        get_sources() -> (Set(Task)):
             Get the set of all tasks with no upstream dependencies.
-        get_sinks() -> (Set[Task]): 
+        get_sinks() -> (Set[Task]):
             Get the set of all tasks with no downstream dependencies.
     """
 
@@ -134,7 +134,7 @@ class DAG:
             self.add_dependencies(dependencies)
 
         return None
-    
+
 
     def __repr__(self):
         if self.tasks:
@@ -190,7 +190,13 @@ class DAG:
         TODO: Handle iterables
         TODO: Handle non-iterables
         """
-        assert isinstance(tasks, set), TypeError('tasks is not a set')
+        assert isinstance(tasks, (set, Task)), TypeError('tasks is not a set')
+
+        if isinstance(tasks, Task):
+            task = tasks
+            self.remove_task(task)
+
+            return None
 
         for t in tasks:
             self.remove_task(t)
@@ -199,7 +205,7 @@ class DAG:
 
     def add_dependency(self, task: Task, depends_on: Task):
         """Add dependency to DAG
-        
+
         Examples:
         >>> from dequindre import Task, DAG
         >>> boil_water = Task('boil_water.py')
@@ -221,11 +227,11 @@ class DAG:
             raise CyclicGraphError(msg)
 
         return None
-    
-    
+
+
     def add_dependencies(self, d: Dict[Task, Set[Task]]):
         """Add dependencies to DAG
-        
+
         Examples:
         >>> from dequindre import Task, DAG
         >>> boil_water = Task('boil_water.py')
@@ -236,7 +242,7 @@ class DAG:
         """
         for task, dependencies in d.items():
             if isinstance(dependencies, Task):
-                dependency = dependencies 
+                dependency = dependencies
                 self.add_dependency(task, dependency)
                 continue
             elif isinstance(dependencies, set):
@@ -343,7 +349,7 @@ class Dequindre:
         self.refresh_dag()
 
         return None
-    
+
 
     def __repr__(self):
         return f"{Dequindre.__qualname__}({self.dag})"

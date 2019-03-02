@@ -71,8 +71,8 @@ def test__DAG_remove_tasks():
     dag.remove_tasks({A, B})
     assert dag.tasks == {C}
 
-    with pytest.raises(AssertionError):
-        dag.remove_tasks(C)
+    dag.remove_tasks(C)
+    assert dag.tasks == set()
 
 # ----------------------------------------------------------------------------
 # add dependencies
