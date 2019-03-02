@@ -81,14 +81,35 @@ class DAG:
     DAGs are instantiated without arguments.
 
     Attributes:
-        tasks (Set[Task]): The set of all tasks. Need not
-        _edges (Dict[Task, Set[Task]]): A dict of directed edges from one Task
-            to a set of Tasks.
+        tasks (Set[Task]): 
+            The set of all tasks.
+        _edges (Dict[Task, Set[Task]]): 
+            A dict of directed edges from one Task to a set of Tasks.
 
     Methods:
-        add_task
-        add_tasks
-        remove_task
+        add_task(task: Task) -> None:
+            Add one task to the DAG with no dependencies.
+        add_tasks(tasks: Set[Task]) -> None:
+            Add multiple tasks to the DAG with no dependencies. 
+        remove_task(task: Task) -> None:
+            Remove one task from the DAG with no dependencies.
+        add_dependency(task: Task, depends_on: Task) -> None:
+            Add a task dependency to the DAG.
+        add_dependencies(d: Dict[Task, Set[Task]]) -> None:
+            Add multiple task dependencies to the DAG.
+        get_downstream() -> (Dict[Task, Set[Task]]): 
+            Get the adjacency dict of downstream Tasks.
+        get_upstream() -> (Dict[Task, Set[Task]]): 
+            Get the adjacency dict of upstream Tasks.
+        get_sources() -> (Set(Task)): 
+            Get the set of all tasks with no upstream dependencies.
+        get_sinks() -> (Set[Task]): 
+            Get the set of all tasks with no downstream dependencies.
+    
+    Initiation:
+        DAG(tasks: Set[Task], dependencies: Dict[Task, Set[Task]]) -> None:
+            You have the option to define all the tasks and dependencies at 
+            once if you prefer that syntax. 
     """
 
     def __init__(self, *, tasks: set = None, dependencies: dict = None):
