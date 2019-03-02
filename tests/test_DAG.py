@@ -60,7 +60,19 @@ def test__DAG_remove_task():
     dag.add_tasks({A, B})
     dag.remove_task(A)
 
-    assert dag.tasks == {B}, 'Test Task was not added to the DAG'
+    assert dag.tasks == {B}
+
+
+def test__DAG_remove_tasks():
+    A, B = get_two_tasks()
+    C = Task('C.py')
+    dag = DAG()
+    dag.add_tasks({A, B, C})
+    dag.remove_tasks({A, B})
+    assert dag.tasks == {C}
+
+    with pytest.raises(AssertionError):
+        dag.remove_tasks(C)
 
 # ----------------------------------------------------------------------------
 # add dependencies
