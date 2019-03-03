@@ -39,41 +39,41 @@ Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](http
 First, install `dequindre` with `pip install dequindre`. Then, in the
 REPL or in a `schedule.py` file,
 
-```basic-example
->>> from dequindre import Task, DAG, Dequindre
->>>
->>> ## define tasks and environments
->>> pour_water = Task('pour_water.py)
->>> boil_water = Task('boil_water.py')
->>> prep_infuser = Task('prep_infuser.py)
->>> steep_tea = Task('steep_tea.py')
->>>
->>> ## define runtime dependencies
->>> make_tea = DAG(dependencies={
-...    boil_water: {pour_water},
-...    steep_tea: {boil_water, prep_infuser}
-... })
->>>
->>> ## run tasks
->>> dq = Dequindre(make_tea, validate_conda=False)
->>> dq.get_schedules()
-defaultdict(<class 'set'>, {
-    1: {Task(prep_infuser.py), Task(pour_water.py)},  
-    2: {Task(boil_water.py)},  
-    3: {Task(steep_tea.py)}})
-```
+    from dequindre import Task, DAG, Dequindre
+
+    ## define tasks and environments
+    pour_water = Task('./tea-tasks/pour_water.py')
+    boil_water = Task('./tea-tasks/boil_water.py')
+    prep_infuser = Task('./tea-tasks/prep_infuser.py')
+    steep_tea = Task('./tea-tasks/steep_tea.py')
+
+    ## define runtime dependencies
+    make_tea = DAG(dependencies={
+        boil_water: {pour_water},
+        steep_tea: {boil_water, prep_infuser}
+    })
+
+    ## run tasks
+    dq = Dequindre(make_tea)
+    dq.get_schedules()
+    # defaultdict(<class 'set'>, {
+    #     1: {Task(prep_infuser.py), Task(pour_water.py)},  
+    #     2: {Task(boil_water.py)},  
+    #     3: {Task(steep_tea.py)}})
+
+    ## dq.run_tasks() can run the files if they exist.
 
 ## Getting Started
 
 Dequindre is has two requirements: conda and python.
 
-### Installing
+### Installation
 
 ```pip
 $ pip install dequindre
 ```
 
-## Contributing
+## Contribute
 
 If you're interested in contributing to Dequindre, [raise an issue](https://github.com/vogt4nick/dequindre/issues), make a pull request to `dev`, and reach out to the author, vogt4nick.
 
