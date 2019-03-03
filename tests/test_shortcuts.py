@@ -3,14 +3,14 @@ from os.path import join as pathjoin
 
 import pytest
 
-from dequindre.constructors import venv_constructor
-from dequindre.constructors import pipenv_constructor
-from dequindre.constructors import conda_constructor
+from dequindre.shortcuts import venv_shortcut
+from dequindre.shortcuts import pipenv_shortcut
+from dequindre.shortcuts import conda_shortcut
 
 
-def test__venv_constructor():
+def test__venv_shortcut():
     prefix = pathjoin('path', 'to')
-    vc = venv_constructor(prefix)
+    vc = venv_shortcut(prefix)
 
     env_name = 'my-test-env'
     correct_path = pathjoin(prefix, env_name, 'Scripts', 'python')
@@ -19,9 +19,9 @@ def test__venv_constructor():
     assert returned_path == correct_path
 
 
-def test__pipenv_constructor():
+def test__pipenv_shortcut():
     prefix = pathjoin('path', 'to')
-    pc = venv_constructor(prefix)
+    pc = venv_shortcut(prefix)
 
     env_name = 'my-test-env'
     correct_path = pathjoin(prefix, env_name, 'Scripts', 'python')
@@ -30,9 +30,9 @@ def test__pipenv_constructor():
     assert returned_path == correct_path
 
 
-def test__conda_constructor():
+def test__conda_shortcut():
     prefix = pathjoin('path', 'to')
-    cc = conda_constructor(prefix)
+    cc = conda_shortcut(prefix)
 
     env_name = 'my-test-env'
     correct_path = pathjoin(prefix, env_name, 'bin', 'python')

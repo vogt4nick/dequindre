@@ -1,19 +1,19 @@
-"""Environment path constructors for easier access.
+"""Environment path shortcuts for easier access.
 
 The three main virtual environment modules follow different structures. We 
 define three functions to simplify paths to these virtual environments.
 
-- venv_constructor
-- pipenv_constructor
-- conda_constructor
+- venv_shortcut
+- pipenv_shortcut
+- conda_shortcut
 """
 
 from os.path import join as pathjoin
 from typing import Callable
 
 
-def venv_constructor(prefix: str = '.', suffix: str = None) -> Callable:
-    """Quickly construct paths to a virtualenv environment
+def venv_shortcut(prefix: str = '.', suffix: str = None) -> Callable:
+    """Quickly construct a path to a virtualenv environment
 
     venv follows the structure: `/path/to/{{my_env}}/Scripts/python`
 
@@ -29,8 +29,8 @@ def venv_constructor(prefix: str = '.', suffix: str = None) -> Callable:
     return lambda s: pathjoin(prefix, s, suffix)
 
 
-def pipenv_constructor(prefix: str = '.', suffix: str = None) -> Callable:
-    """Quickly construct paths to a pipenv environment
+def pipenv_shortcut(prefix: str = '.', suffix: str = None) -> Callable:
+    """Quickly construct a path to a pipenv environment
 
     pipenv follows the structure: `/path/to/{{my_env}}/Scripts/python`
 
@@ -46,8 +46,8 @@ def pipenv_constructor(prefix: str = '.', suffix: str = None) -> Callable:
     return lambda s: pathjoin(prefix, s, suffix)
 
 
-def conda_constructor(prefix: str, suffix: str = None) -> Callable:
-    """Quickly construct paths to a conda environment
+def conda_shortcut(prefix: str, suffix: str = None) -> Callable:
+    """Quickly construct a path to a conda environment
 
     conda follows the structure: `/path/to/conda/envs/{{my_env}}/bin/python`
 
