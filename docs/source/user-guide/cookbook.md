@@ -3,19 +3,19 @@
 
 This cookbook will make use of three sample python files.
 
-```pour_tea.py
-## ./pour_tea.py
-print("I am pouring tea...)
-```
-
-```boil_tea.py
-## ./boil_tea.py
-print("I am boiling tea...")
+```boil_water.py
+## ./boil_water.py
+print("I am boiling water...")
 ```
 
 ```steep_tea.py
 ## ./steep_tea.py
 print("I am steeping tea...")
+```
+
+```pour_tea.py
+## ./pour_tea.py
+print("I am pouring tea...)
 ```
 
 We also use Git Bash as the terminal. Bash commands work on windows and unix machines unless otherwise stated.
@@ -118,6 +118,8 @@ conda, like virtualenv and pipenv, also has a well defined structure for environ
 Now the task is pointing to the conda environment and will run that environment at runtime.
 
 ### Configure DAG
+
+
 
 ## Run Tasks
 
