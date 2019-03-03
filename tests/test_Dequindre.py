@@ -118,25 +118,4 @@ def test__Dequindre_get_schedules():
     }
 
 
-# test run tasks
-def test__Dequindre_run_task():
-    A = Task('./tests/test-files/A.py')
-    B = Task('./tests/test-files/B.py')
-    Z = Task('./tests/test-files/i-dont-exist.py')
-    dag = DAG(tasks={A, B})
-    dq = Dequindre(dag)
-    
-    dq.run_task(A)
-
-    with pytest.raises(AssertionError):
-        dq.run_task(Z)
-
-
-def test__Dequindre_run_tasks():
-    A = Task('./tests/test-files/A.py')
-    B = Task('./tests/test-files/B.py')
-    dag = DAG(tasks={A, B})
-    dq = Dequindre(dag)
-    
-    dq.run_tasks()
-
+# run task(s) tests in test_example.py

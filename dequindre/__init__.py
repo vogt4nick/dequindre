@@ -15,7 +15,7 @@ from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
 
 
-__version__ = '0.8.0'
+__version__ = '0.8.1'
 
 
 class CyclicGraphError(Exception):
@@ -413,7 +413,7 @@ class Dequindre:
         assert hash(task) in [hash(t) for t in self.dag.tasks], \
             ValueError(f'{task} is not in the dag')
 
-        print(f'\nRunning {repr(task)}\n')
+        print(f'\nRunning {repr(task)}\n', flush=True)
         r = subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
 
         return None
@@ -429,4 +429,4 @@ class Dequindre:
                 try:
                     self.run_task(task)
                 except Exception as err:
-                    print(err)
+                    print(err, flush=True)
