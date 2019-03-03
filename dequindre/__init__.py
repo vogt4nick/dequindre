@@ -20,6 +20,8 @@ __version__ = '0.8.4.dev0'
 
 class CyclicGraphError(Exception):
     pass
+
+
 class Task:
     """Defines a Task and its relevant attributes. Tasks with the same loc
     are equal.
