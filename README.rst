@@ -113,26 +113,36 @@ In the REPL or in a ``schedule.py`` file,
 License
 ^^^^^^^
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE_ file for details.
+
+.. _LICENSE: https://github.com/vogt4nick/dequindre/blob/master/LICENSE
 
 
 Versioning
 ^^^^^^^^^^
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/vogt4nick/dequindre/tags).  
+We use SemVer_ for versioning. For the versions available, see the `tags on this repository`_.
+
+.. _SemVer: http://semver.org/
+.. _tags on this repository: https://github.com/vogt4nick/dequindre/tags
 
 
 Contribute
 ^^^^^^^^^^
 
-If you're interested in contributing to Dequindre, 
-[raise an issue](https://github.com/vogt4nick/dequindre/issues), 
-make a pull request to `dev`, and reach out to the author, vogt4nick.
+If you're interested in contributing to Dequindre, `raise an issue`_, make a 
+pull request to `dev`, and reach out to the author, vogt4nick.
 
-Please read [contributing.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
+.. _raise an issue: https://github.com/vogt4nick/dequindre/issues
+
+Please read `our contribution guidelines`_ for details on our code of conduct, 
+and the process for submitting pull requests to us.
+
+.. _our contribution guidelines: https://github.com/vogt4nick/dequindre/blob/master/CONTRIBUTE.rst
 
 
 Acknowledgements
 ^^^^^^^^^^^^^^^^
 
-Thank you, Dynatrace, for facilitating the early development of Dequindre during Innovation Day, February 2019.  
+Thank you, Dynatrace, for facilitating the early development of Dequindre 
+during Innovation Day, February 2019.  
