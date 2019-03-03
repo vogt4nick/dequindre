@@ -17,9 +17,9 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
     :alt: Last Commit
     :target: https://github.com/vogt4nick/dequindre
 
-.. image:: https://img.shields.io/pypi/l/dequindre.svg?color=red
+.. image:: https://img.shields.io/github/license/vogt4nick/dequindre.svg
     :alt: License
-    :target: https://pypi.org/project/dequindre/
+    :target: https://github.com/vogt4nick/dequindre
 
 .. .. image:: https://img.shields.io/pypi/dw/dequindre.svg
 ..     :alt: PyPI - Downloads
@@ -52,14 +52,14 @@ Features
 ^^^^^^^^
 
 - **Automated workflow scheduling**
-- **Run your Python tasks in any pre-defined environments**
-    - ``dequindre`` facilitates **virtualenv**, **conda**, and **pipenv** environments
-- **Supports dynamic workflow configuration** also seen in Airflow
-- **Pure Python**: Relies entirely from Python built-ins.
+- **Pure Python**: Relies entirely on Python built-ins
+    - This reduces bugs, complexity, and prevents dependency hell
 - **Cross-Python compatible**: Supports Python 2 and Python 3
-- **Cross-platform**: Windows and Unix style environments
+- **Cross-platform**: Windows and Unix style OS environments
+- **Run your Python tasks in any pre-defined environments**
+    - dequindre facilitates **virtualenv**, **conda**, and **pipenv** environments
+- **Supports dynamic workflow configuration** also seen in Airflow
 - **Documented** examples and configuration
-
 
 Basic Example
 ^^^^^^^^^^^^^

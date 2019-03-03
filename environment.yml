@@ -5,7 +5,7 @@ channels:
 dependencies:
   - python        =3.6
   - pip          >=18.1
-  - pipenv       =2018.11.26 
+  - pipenv        =2018.11.26 
   - pytest       >=4.2,  <5.0
   - sphinx       >=1.8,  <2.0
   - tox          >=3.6,  <4.0 
