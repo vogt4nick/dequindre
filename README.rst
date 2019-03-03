@@ -1,3 +1,4 @@
+=====================================================
 Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
 =====================================================
 
@@ -13,17 +14,17 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
     :alt: Version
     :target: https://pypi.org/project/dequindre/
 
-.. image:: https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg
-    :alt: Last Commit
-    :target: https://github.com/vogt4nick/dequindre
+.. .. image:: https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg
+..     :alt: Last Commit
+..     :target: https://github.com/vogt4nick/dequindre
 
 .. image:: https://img.shields.io/github/license/vogt4nick/dequindre.svg
     :alt: License
     :target: https://github.com/vogt4nick/dequindre
 
-.. .. image:: https://img.shields.io/pypi/dw/dequindre.svg
-..     :alt: PyPI - Downloads
-..     :target: https://pypi.org/project/dequindre/
+.. image:: https://img.shields.io/pypi/dw/dequindre.svg
+    :alt: PyPI - Downloads
+    :target: https://pypi.org/project/dequindre/
 
 .. .. image:: https://img.shields.io/github/issues/vogt4nick/dequindre.svg
 ..     :alt: Count Open Issues
