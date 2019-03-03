@@ -61,12 +61,27 @@ Features
 - **Supports dynamic workflow configuration** also seen in Airflow
 - **Documented** examples and configuration
 
+
+Getting Started
+^^^^^^^^^^^^^^^
+
+Installation
+~~~~~~~~~~~~
+
+Install dequindre from PyPI with
+```
+$ pip install dequindre
+```
+
+Conda users can use pip too. Since dequindre has no third-party dependencies, 
+conda doesn't benefit from tracking dequindre's dependencies.
+
 Basic Example
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
-First, install ``dequindre`` with ``pip install dequindre``. Then, in the REPL or in a ``schedule.py`` file,  
+In the REPL or in a ``schedule.py`` file,  
 
-.. code-block :: python
+.. code-block ::
 
     >>> from dequindre import Task, DAG, Dequindre
 
@@ -93,32 +108,27 @@ First, install ``dequindre`` with ``pip install dequindre``. Then, in the REPL o
     >>> ## dq.run_tasks() can run the files if they exist. 
 
 
-Getting Started
-^^^^^^^^^^^^^^^
+License
+^^^^^^^
 
-Installation
-~~~~~~~~~~~~
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```
-$ pip install dequindre
-```
-
-Contribute
-^^^^^^^^^^
-
-If you're interested in contributing to Dequindre, [raise an issue](https://github.com/vogt4nick/dequindre/issues), make a pull request to `dev`, and reach out to the author, vogt4nick.
-
-Please read [contributing.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 Versioning
 ^^^^^^^^^^
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/vogt4nick/dequindre/tags).  
 
-License
-^^^^^^^
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Contribute
+^^^^^^^^^^
+
+If you're interested in contributing to Dequindre, 
+[raise an issue](https://github.com/vogt4nick/dequindre/issues), 
+make a pull request to `dev`, and reach out to the author, vogt4nick.
+
+Please read [contributing.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
 
 Acknowledgements
 ^^^^^^^^^^^^^^^^
