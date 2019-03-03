@@ -20,9 +20,9 @@ print("I am pouring tea...)
 
 We also use Git Bash as the terminal. Bash commands work on windows and unix machines unless otherwise stated.
 
-## Configuration
+## Tasks
 
-### Configure Tasks
+### Configure a Task
 
 ```config-tasks-1
 >>> from dequindre import Task
@@ -37,12 +37,13 @@ Task(./pour_tea.py)
 
 Note that that the python environment defaulted to 'python'. To use different environments, we'll need to define them first.
 
-### virtualenv Environments
+### Create Tasks in virtualenv Environments
 
 Suppose you want to run tasks in a different virtualenv environment. Let's define a virtualenv environment:
 
 ```venv
 $ virtualenv venv
+...
 ```
 
 virtualenv envirionments have a defined structure. The path to the python executable is `./venv/Scripts/python`. This will become our task env.
@@ -57,7 +58,7 @@ virtualenv envirionments have a defined structure. The path to the python execut
 
 Now the task will run in the specified environment at runtime.
 
-### pipenv Environments
+### Create Tasks in pipenv Environments
 
 pipenv environments follow the same structure as virtualenv environments. They may be be located elsewhere on you file system. Finding it is easy. Note that you may have to delete your recently created `venv` directory.
 
@@ -85,7 +86,7 @@ The output will be different on your machine, and there may be multiple paths, b
 
 Now the task is pointing to the pipenv environment and will run that environment at runtime.
 
-### conda Environments
+### Create Tasks in conda Environments
 
 Suppose you want to run tasks in a different virtualenv environment. Conda environments are slightly trickier than virtualenv environments.
 
@@ -117,9 +118,47 @@ conda, like virtualenv and pipenv, also has a well defined structure for environ
 
 Now the task is pointing to the conda environment and will run that environment at runtime.
 
-### Configure DAG
+## DAGs
 
+### Configure a DAG
 
+```config-dag
+>>> from dequindre import Task, DAG
 
-## Run Tasks
+>>> ## define tasks
+>>> boil_water = Task('./boil_water.py')
+>>> steep_tea = Task('./steep_tea.py')
+>>> pour_tea = Task('./pour_tea.py')
 
+>>> make_tea = DAG()
+>>> make_tea.add_dependencies({
+...       steep_tea: boil_water,
+...       pour_tea: steep_tea
+...   })
+```
+
+## Dequindre
+
+```config-dequindre
+>>> from dequindre import Task, DAG, Dequindre
+
+>>> ## define tasks
+>>> boil_water = Task('./boil_water.py')
+>>> steep_tea = Task('./steep_tea.py')
+>>> pour_tea = Task('./pour_tea.py')
+
+>>> make_tea = DAG()
+>>> make_tea.add_dependencies({
+...       steep_tea: boil_water,
+...       pour_tea: steep_tea
+...   })
+
+>>> dq = Dequindre(make_tea)
+>>> dq.get_schedules()
+defaultdict(<class 'set'>, {
+    1: {Task(boil_water.py)},  
+    2: {Task(steep_tea.py)},  
+    3: {Task(pour_tea.py)}})
+```
+
+### Run Tasks
