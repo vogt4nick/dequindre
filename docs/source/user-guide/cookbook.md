@@ -1,0 +1,99 @@
+
+# Cookbook
+
+This cookbook will make use of three sample python files.
+
+```pour_tea.py
+## ./pour_tea.py
+print("I am pouring tea...)
+```
+
+```boil_tea.py
+## ./boil_tea.py
+print("I am boiling tea...")
+```
+
+```steep_tea.py
+## ./steep_tea.py
+print("I am steeping tea...")
+```
+
+We also use Git Bash as the terminal. Bash commands work on windows and unix machines unless otherwise stated.
+
+## Configuration
+
+### Configure Tasks
+
+```config-tasks-1
+>>> from dequindre import Task
+>>> pour_tea = Task('./pour_tea.py')
+>>> pour_tea
+Task(./pour_tea.py)
+>>> pour_tea.loc
+'./pour_tea.py'
+>>> pour_tea.env
+'python'
+```
+
+Note that that the python environment defaulted to 'python'. To use different environments, we'll need to define them first.
+
+### virtualenv Environments
+
+Suppose you want to run tasks in a different virtualenv environment. Let's define a virtualenv environment:
+
+```venv
+$ virtualenv venv
+```
+
+virtualenv envirionments have a defined structure. The path to the python executable is `./venv/Scripts/python`. This will become our task env.
+
+```virtualenv-task
+>>> from dequindre import Task
+>>> venv = './venv/Scripts/python'
+>>> pour_tea = Task('./pour_tea.py', env=venv)
+>>> pour_tea.env
+'./venv/Scripts/python'
+```
+
+Now the task will run in the specified environment at runtime.
+
+### conda Environments
+
+Suppose you want to run tasks in a different virtualenv environment. Conda environments are slightly trickier than virtualenv environments.
+
+First, create a test environment and find where your conda installation is located.
+
+```conda
+$ conda create -n test_env python=3.6
+...
+$ where conda
+C:\Users\Me\AppData\Local\Continuum\miniconda3\condabin\conda.bat
+C:\Users\Me\AppData\Local\Continuum\miniconda3\Scripts\conda.exe
+C:\Users\Me\AppData\Local\Continuum\miniconda3\Library\bin\conda.bat
+```
+
+The output will be different on your machine, but the important directory is the common directory; in this case, it's miniconda3.
+
+conda environments also have a well defined structure that looks like `miniconda3/envs/test_env/python`
+
+```conda-task
+>>> from dequindre import Task
+>>> from os.path import join as pathjoin
+>>> CONDA_DIR = '/c/Users/Nick.Vogt/AppData/Local/Continuum/miniconda3'
+
+>>> test_env = pathjoin(CONDA_DIR, 'envs', 'test_env', 'python')
+>>> pour_tea = Task('./pour_tea.py', env=venv)
+>>> pour_tea.env
+'/c/users/me/AppData/Local/Continuum/miniconda3/envs/test_env/Scripts/python'
+```
+
+So now the task is pointing to the conda environment and will run that environment at runtime.
+
+### pipenv Environments
+
+
+
+### Configure DAG
+
+## Run Tasks
+

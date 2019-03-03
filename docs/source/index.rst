@@ -99,6 +99,6 @@ User Guide
 .. toctree::
    :maxdepth: 2
 
-   user/intro
-   user/install
-   user/cookbook
+   user-guide/intro
+   user-guide/design
+   user-guide/cookbook
