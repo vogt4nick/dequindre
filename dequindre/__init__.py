@@ -79,28 +79,6 @@ class Task:
         return repr(self)
 
 
-def common_task(common_loc: str, common_env: str = 'python'):
-    """Create tasks with a common parent path and environment.
-    
-    Lots of tasks will use the same environment or same directory. These 
-    `commons` reduce duplicate code.
-
-    Args:
-        common_loc (str): {}-formatted parent path.
-        common_env (str, optional): environment.
-    """
-    assert isinstance(common_loc, str), '`common_loc` must be a str'
-    assert len(common_loc) > 0, '`common_loc` must not be an empty str'
-    assert '{' in common_loc and '}' in common_loc
-    assert isinstance(common_env, str)
-    assert len(common_env) > 0, '`common_env` must not be an empty str'
-
-    def construct_task(loc: str):
-        return Task(common_loc.format(loc), env=common_env)
-    
-    return construct_task
-
-
 class DAG:
     """Define a DAG and relationships between tasks. 
     
