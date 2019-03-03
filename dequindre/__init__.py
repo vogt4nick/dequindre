@@ -17,7 +17,7 @@ from subprocess import check_output, CalledProcessError
 from dequindre.exceptions import CyclicGraphError
 
 
-__version__ = '0.8.6.dev0'
+__version__ = '0.9.0.dev0'
 
 
 class Task:
