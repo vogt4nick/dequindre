@@ -70,9 +70,10 @@ Installation
 ~~~~~~~~~~~~
 
 Install dequindre from PyPI with
-```
-$ pip install dequindre
-```
+
+.. code::
+
+    $ pip install dequindre
 
 Conda users can use pip too. Since dequindre has no third-party dependencies, 
 conda doesn't benefit from tracking dequindre's dependencies.
@@ -82,7 +83,7 @@ Basic Example
 
 In the REPL or in a ``schedule.py`` file,  
 
-.. code-block ::
+.. code-block:: python
 
     >>> from dequindre import Task, DAG, Dequindre
 
