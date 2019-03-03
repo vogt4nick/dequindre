@@ -14,12 +14,10 @@ from typing import Dict, Set
 from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
 
+from dequindre.exceptions import CyclicGraphError
 
-__version__ = '0.8.5'
 
-
-class CyclicGraphError(Exception):
-    pass
+__version__ = '0.9.0'
 
 
 class Task:
