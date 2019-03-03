@@ -159,6 +159,17 @@ defaultdict(<class 'set'>, {
     1: {Task(boil_water.py)},  
     2: {Task(steep_tea.py)},  
     3: {Task(pour_tea.py)}})
-```
+>>> dq.run_tasks()
 
-### Run Tasks
+Running Task(./boil_water.py)
+
+I am boiling water...
+
+Running Task(./steep_tea.py)
+
+I am steeping tea...
+
+Running Task(./pour_tea.py)
+
+I am pouring tea...
+```
