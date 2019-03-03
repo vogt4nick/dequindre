@@ -137,7 +137,7 @@ Now the task is pointing to the conda environment and will run that environment 
 ...   })
 ```
 
-## Dequindre
+## Dequindre Schedulers
 
 ```config-dequindre
 >>> from dequindre import Task, DAG, Dequindre
@@ -173,3 +173,5 @@ Running Task(./pour_tea.py)
 
 I am pouring tea...
 ```
+
+## Error Handling
