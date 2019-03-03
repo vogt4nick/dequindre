@@ -66,7 +66,8 @@ executable is `./venv/Scripts/python`. This will become our task env.
 
 Now the task will run in the specified environment at runtime.
 
-### Create Tasks in pipenv Environments
+pipenv Environments
+~~~~~~~~~~~~~~~~~~~
 
 pipenv environments follow the same structure as virtualenv environments. They
 may be be located elsewhere on you file system. Finding it is easy. Note that 
