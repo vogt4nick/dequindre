@@ -15,7 +15,7 @@ from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
 
 
-__version__ = '0.8.1'
+__version__ = '0.8.2.dev0'
 
 
 class CyclicGraphError(Exception):
