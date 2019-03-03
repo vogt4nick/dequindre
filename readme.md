@@ -1,5 +1,5 @@
 
-# Dequindre /\_de-KWIN-der\_/ (n.): A minimalist scheduler.
+# Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
 
 [![Supported
 Versions](https://img.shields.io/pypi/pyversions/dequindre.svg)](https://pypi.org/project/dequindre/)
@@ -7,7 +7,7 @@ Versions](https://img.shields.io/pypi/pyversions/dequindre.svg)](https://pypi.or
 [![Version](https://img.shields.io/pypi/v/dequindre.svg?color=blue)](https://pypi.org/project/dequindre/)
 [![Last
 Commit](https://img.shields.io/github/last-commit/vogt4nick/dequindre.svg)](https://github.com/vogt4nick/dequindre)
-[![License](https://img.shields.io/pypi/l/dequindre.svg?color=red)](https://pypi.org/project/dequindre/)
+[![License](https://img.shields.io/github/license/vogt4nick/dequindre.svg)](https://github.com/vogt4nick/dequindre/blob/master/LICENSE)
 
 ---
 

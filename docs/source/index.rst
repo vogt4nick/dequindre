@@ -17,9 +17,9 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
     :alt: Last Commit
     :target: https://github.com/vogt4nick/dequindre
 
-.. image:: https://img.shields.io/pypi/l/dequindre.svg?color=red
+.. image:: https://img.shields.io/github/license/vogt4nick/dequindre.svg
     :alt: License
-    :target: https://pypi.org/project/dequindre/
+    :target: https://github.com/vogt4nick/dequindre
 
 .. .. image:: https://img.shields.io/pypi/dw/dequindre.svg
 ..     :alt: PyPI - Downloads
