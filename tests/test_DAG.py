@@ -2,7 +2,8 @@
 
 import pytest
 
-from dequindre import Task, DAG, CyclicGraphError
+from dequindre import Task, DAG
+from dequindre.exceptions import CyclicGraphError
 
 # ----------------------------------------------------------------------------
 # Helper Functions
