@@ -7,7 +7,7 @@ User Guide
 .. toctree::
    :maxdepth: 2
 
-   autodoc/dequindre-module
+   api-docs/api-docs
    user-guide/cookbook
    user-guide/design
    user-guide/philosophy
