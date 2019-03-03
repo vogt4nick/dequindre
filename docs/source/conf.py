@@ -26,7 +26,7 @@ author = 'Nick Vogt'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = 'release==0.8.2'
+release = 'release==0.8.3.dev0'
 
 
 # -- General configuration ---------------------------------------------------
