@@ -57,6 +57,34 @@ virtualenv envirionments have a defined structure. The path to the python execut
 
 Now the task will run in the specified environment at runtime.
 
+### pipenv Environments
+
+pipenv environments follow the same structure as virtualenv environments. They may be be located elsewhere on you file system. Finding it is easy. Note that you may have to delete your recently created `venv` directory.
+
+```pipenv
+$ pipenv install dequindre
+...
+$ pipenv shell
+Launching subshell in virtual environment
+$ where python
+C:\Users\Me\.virtualenvs\dequindre-5srOTnbr\Scripts\python.exe
+```
+
+The output will be different on your machine, and there may be multiple paths, but the pipenv path will include the `.virtualenvs/` directory.
+
+```pipenv-task
+>>> from dequindre import Task
+>>> from os.path import join as pathjoin
+>>> PIPENV_DIR = '/c/Users/Me/.virtualenvs'
+
+>>> dequindre_env = pathjoin(PIPENV_DIR, 'dequindre-5srOTnbr', 'Scripts', 'python')
+>>> pour_tea = Task('./pour_tea.py', env=dequindre_env)
+>>> pour_tea.env
+'/c/Users/Me/.virtualenvs/dequindre-5srOTnbr/Scripts/python'
+```
+
+Now the task is pointing to the pipenv environment and will run that environment at runtime.
+
 ### conda Environments
 
 Suppose you want to run tasks in a different virtualenv environment. Conda environments are slightly trickier than virtualenv environments.
@@ -74,7 +102,7 @@ C:\Users\Me\AppData\Local\Continuum\miniconda3\Library\bin\conda.bat
 
 The output will be different on your machine, but the important directory is the common directory; in this case, it's miniconda3.
 
-conda environments also have a well defined structure that looks like `miniconda3/envs/test_env/python`
+conda, like virtualenv and pipenv, also has a well defined structure for environments that looks like `miniconda3/envs/test_env/python`.
 
 ```conda-task
 >>> from dequindre import Task
@@ -87,11 +115,7 @@ conda environments also have a well defined structure that looks like `miniconda
 '/c/users/me/AppData/Local/Continuum/miniconda3/envs/test_env/Scripts/python'
 ```
 
-So now the task is pointing to the conda environment and will run that environment at runtime.
-
-### pipenv Environments
-
-
+Now the task is pointing to the conda environment and will run that environment at runtime.
 
 ### Configure DAG
 
