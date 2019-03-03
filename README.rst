@@ -71,7 +71,7 @@ Installation
 
 Install dequindre from PyPI with
 
-.. code::
+.. code-block:: bash
 
     $ pip install dequindre
 
