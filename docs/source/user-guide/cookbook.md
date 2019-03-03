@@ -15,7 +15,7 @@ print("I am steeping tea...")
 
 ```pour_tea.py
 ## ./pour_tea.py
-print("I am pouring tea...)
+print("I am pouring tea...")
 ```
 
 We also use Git Bash as the terminal. Bash commands work on windows and unix machines unless otherwise stated.
@@ -139,6 +139,8 @@ Now the task is pointing to the conda environment and will run that environment 
 
 ## Dequindre Schedulers
 
+The Dequindre scheduler is the last major object in dequindre. After defining your tasks and task dependencies in the DAG, you can create a Dequindre scheduler.  
+
 ```config-dequindre
 >>> from dequindre import Task, DAG, Dequindre
 
@@ -173,5 +175,3 @@ Running Task(./pour_tea.py)
 
 I am pouring tea...
 ```
-
-## Error Handling
