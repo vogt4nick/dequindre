@@ -33,5 +33,27 @@ def test__readme_example():
     dq.run_tasks()
 
 
+def test__common_task_example():
+    from dequindre import common_task, DAG, Dequindre
+
+    CommonTask = common_task('./tea-tasks/{}', 'python')
+
+    boil_water = CommonTask('boil_water.py')
+    pour_water = CommonTask('pour_water.py')
+    prep_infuser = CommonTask('prep_infuser.py')
+    steep_tea = CommonTask('steep_tea.py')
+
+    make_tea = DAG(dependencies={
+        boil_water: {pour_water},
+        steep_tea: {boil_water, prep_infuser}
+    })
+
+    ## run tasks
+    dq = Dequindre(make_tea)
+    
+    dq.run_tasks()
+
+
 if __name__ == '__main__':
     test__readme_example()
+    test__common_task_example()
