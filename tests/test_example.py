@@ -5,6 +5,9 @@ from dequindre import Task, DAG, Dequindre
 
 
 def test__readme_example():
+
+    from dequindre import Task, DAG, Dequindre
+
     ## define tasks and environments
     pour_water = Task('./tea-tasks/pour_water.py')
     boil_water = Task('./tea-tasks/boil_water.py')
@@ -24,6 +27,9 @@ def test__readme_example():
     #     1: {Task(prep_infuser.py), Task(pour_water.py)},  
     #     2: {Task(boil_water.py)},  
     #     3: {Task(steep_tea.py)}})
+
+    ## dq.run_tasks() can run the files if they exist. 
+    
     dq.run_tasks()
 
 
