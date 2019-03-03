@@ -10,3 +10,4 @@ User Guide
    user-guide/intro
    user-guide/design
    user-guide/cookbook
+   autodoc/dequindre-module
