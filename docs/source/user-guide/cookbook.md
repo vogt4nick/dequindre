@@ -67,7 +67,7 @@ $ pipenv install dequindre
 $ pipenv shell
 Launching subshell in virtual environment
 $ where python
-C:\Users\Me\.virtualenvs\dequindre-5srOTnbr\Scripts\python.exe
+/your/path/to/.virtualenvs/dequindre-5srOTnbr/Scripts/python
 ```
 
 The output will be different on your machine, and there may be multiple paths, but the pipenv path will include the `.virtualenvs/` directory.
@@ -80,7 +80,7 @@ The output will be different on your machine, and there may be multiple paths, b
 >>> dequindre_env = pathjoin(PIPENV_DIR, 'dequindre-5srOTnbr', 'Scripts', 'python')
 >>> pour_tea = Task('./pour_tea.py', env=dequindre_env)
 >>> pour_tea.env
-'/c/Users/Me/.virtualenvs/dequindre-5srOTnbr/Scripts/python'
+'/your/path/to/.virtualenvs/dequindre-5srOTnbr/Scripts/python'
 ```
 
 Now the task is pointing to the pipenv environment and will run that environment at runtime.
@@ -95,9 +95,9 @@ First, create a test environment and find where your conda installation is locat
 $ conda create -n test_env python=3.6
 ...
 $ where conda
-C:\Users\Me\AppData\Local\Continuum\miniconda3\condabin\conda.bat
-C:\Users\Me\AppData\Local\Continuum\miniconda3\Scripts\conda.exe
-C:\Users\Me\AppData\Local\Continuum\miniconda3\Library\bin\conda.bat
+/your/path/to/miniconda3/condabin/
+/your/path/to/miniconda3/Scripts/conda
+/your/path/to/miniconda3/Library/bin/conda
 ```
 
 The output will be different on your machine, but the important directory is the common directory; in this case, it's miniconda3.
@@ -107,12 +107,12 @@ conda, like virtualenv and pipenv, also has a well defined structure for environ
 ```conda-task
 >>> from dequindre import Task
 >>> from os.path import join as pathjoin
->>> CONDA_DIR = '/c/Users/Nick.Vogt/AppData/Local/Continuum/miniconda3'
+>>> CONDA_DIR = '/your/path/to/miniconda3'
 
 >>> test_env = pathjoin(CONDA_DIR, 'envs', 'test_env', 'python')
 >>> pour_tea = Task('./pour_tea.py', env=venv)
 >>> pour_tea.env
-'/c/users/me/AppData/Local/Continuum/miniconda3/envs/test_env/Scripts/python'
+'/your/path/to/miniconda3/envs/test_env/Scripts/python'
 ```
 
 Now the task is pointing to the conda environment and will run that environment at runtime.
