@@ -26,7 +26,7 @@ author = 'Nick Vogt'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.5.0.dev1'
+release = 'release==0.8.2'
 
 
 # -- General configuration ---------------------------------------------------
@@ -74,14 +74,15 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'classic' # 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
-
+html_theme_options = {
+    "stickysidebar": "true"
+}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".

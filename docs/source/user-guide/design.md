@@ -1,5 +1,5 @@
 
-# Cookbook
+# Design
 
 ## Class Structure
 
@@ -46,9 +46,3 @@ Dequinder is the scheduler; it looks at the DAG and runs each task in order. As 
 - `get_schedules()` returns the reverse: a dict of int-task key-value pairs. \
   - e.g. The dependencies `make_tea -> pour_tea -> drink_tea` will give the dict `{1: {make_tea}, 2: {pour_tea}, 3: {drink_tea}}`
 - `run_task(task)` and `run_tasks()` allow you to run a specific task independent of the dag or every task according to the schedule.
-
-## Configure Tasks
-
-## Configure DAG
-
-## Run Tasks
