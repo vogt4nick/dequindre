@@ -32,7 +32,7 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
 
 
 Vision: Simplify Workflow Automation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``dequindre`` aims to simplify workflow automation. It is part of a larger 
 vision to teach the fundamentals and best practices to practicing and aspiring
@@ -40,7 +40,7 @@ data scientists and data engineers.
 
 
 What is dequindre?
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 
 ``dequindre`` is a minimalist scheduler you can use to:
 
@@ -50,7 +50,7 @@ What is dequindre?
 
 
 Features
-^^^^^^^^
+~~~~~~~~
 
 - **Automated workflow scheduling**
 - **Pure Python**: Relies entirely on Python built-ins
@@ -64,10 +64,10 @@ Features
 
 
 Getting Started
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 Installation
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 Install dequindre from PyPI with
 
@@ -79,7 +79,7 @@ Conda users can use pip too. Since dequindre has no third-party dependencies,
 conda doesn't benefit from tracking dequindre's dependencies.
 
 Basic Example
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 
 In the REPL or in a ``schedule.py`` file,  
 
@@ -109,6 +109,9 @@ In the REPL or in a ``schedule.py`` file,
 
     >>> ## dq.run_tasks() can run the files if they exist. 
 
+
+Extras
+~~~~~~
 
 License
 ^^^^^^^
