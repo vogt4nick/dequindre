@@ -3,3 +3,6 @@
 """
 class CyclicGraphError(Exception):
     pass
+
+class EarlyAbortError(Exception):
+    pass

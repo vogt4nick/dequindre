@@ -5,7 +5,7 @@ from collections import defaultdict
 import pytest
 
 from dequindre import Task, DAG, Dequindre
-
+from dequindre.exceptions import EarlyAbortError
 
 def test__Dequindre_init_exceptions():
     """Raise expected exceptions
@@ -118,4 +118,29 @@ def test__Dequindre_get_schedules():
     }
 
 
-# run task(s) tests in test_example.py
+def test__run_tasks_fail_hard():
+    from dequindre import DAG, Dequindre
+    from dequindre.commons import common_task
+
+    with common_task('./tea-tasks/{}', 'python') as TeaTask:
+        boil_water = TeaTask('boil_water.py')
+        pour_water = TeaTask('pour_water.py')
+        prep_infuser = TeaTask('prep_infuser.py')
+        steep_tea = TeaTask('steep_tea.py')
+        fake_task = TeaTask('not-a-real-task.py')
+
+    make_tea = DAG(dependencies={
+        pour_water: fake_task,
+        boil_water: {pour_water},
+        steep_tea: {boil_water, prep_infuser}
+    })
+
+    ## run tasks
+    dq = Dequindre(make_tea)
+
+    with pytest.raises(AssertionError):
+        dq.run_tasks(error_handling='bad-arg')
+
+    with pytest.raises(EarlyAbortError):
+        dq.run_tasks(error_handling='hard')
+
