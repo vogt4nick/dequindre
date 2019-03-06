@@ -1,11 +1,10 @@
-"""Environment path shortcuts for easier access.
+# -*- coding: utf-8 -*-
+"""Shortcuts to defining tasks and environments.
 
-The three main virtual environment modules follow different structures. We 
-define three functions to simplify paths to these virtual environments.
-
-- venv_shortcut
-- pipenv_shortcut
-- conda_shortcut
+It's not uncommon for tasks to share a similar parent directory or structure.
+Likewise, environments almost always share the same parent directory or
+structure. The commons module makes well-founded assumptions about these
+structures to improve readability.
 """
 
 from contextlib import contextmanager
@@ -25,6 +24,16 @@ def common_task(common_loc: str, common_env: str = 'python'):
     Args:
         common_loc (str): {}-formatted parent path.
         common_env (str, optional): environment.
+    
+    Example:
+        >>> from dequindre.commons import common_task
+        >>> with common_task('./tea-tasks/{}/main.py') as T:
+        ...     boil_water = T('boil_water')
+        ...     steep_tea  = T('steep_tea')
+        ...     drink_tea  = T('drink_tea')
+        ...
+        >>> boil_water
+        Task('./tea-tasks/boil_water/main.py')
     """
     assert isinstance(common_loc, str), '`common_loc` must be a str'
     assert len(common_loc) > 0, '`common_loc` must not be an empty str'
@@ -52,6 +61,15 @@ def common_venv(common_prefix: str = '.',
 
     Returns:
         Function to shorten env specification
+    
+    Example:
+        >>> from dequindre.commons import common_venv
+        >>> with common_venv('./tea-envs') as env:
+        ...     python27 = env('python27')
+        ...     python36 = env('python36')
+        ...
+        >>> python27
+        './tea-envs/python27/Scripts/python'
     """
     if common_suffix is None:
         common_suffix = pathjoin('Scripts', 'python')
@@ -72,6 +90,15 @@ def common_pipenv(common_prefix: str = '.',
 
     Returns:
         Function to shorten env specification
+    
+    Example:
+        >>> from dequindre.commons import common_pipenv
+        >>> with common_pipenv('/path/to/tea-envs') as env:
+        ...     python27 = env('python27')
+        ...     python36 = env('python36')
+        ...
+        >>> python27
+        '/path/to/tea-envs/python27/Scripts/python'
     """
     if common_suffix is None:
         common_suffix = pathjoin('Scripts', 'python')
@@ -92,6 +119,15 @@ def common_conda_env(common_prefix: str,
 
     Returns:
         Function to shorten env specification
+    
+    Example:
+        >>> from dequindre.commons import common_conda_env
+        >>> with common_conda_env('/path/to/conda/envs') as env:
+        ...     python27 = env('python27')
+        ...     python36 = env('python36')
+        ...
+        >>> python27
+        '/path/to/conda/envs/python27/bin/python'
     """
     if common_suffix is None:
         common_suffix = pathjoin('bin', 'python')

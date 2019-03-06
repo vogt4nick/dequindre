@@ -11,3 +11,5 @@ Cookbook
 .. include:: ./cookbook/dags.rst
 
 .. include:: ./cookbook/dequindre-schedulers.rst
+
+.. include:: ./cookbook/altogether.rst
