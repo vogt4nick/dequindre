@@ -14,7 +14,7 @@ from typing import Dict, Set
 from subprocess import run as subprocess_run
 from subprocess import check_output, CalledProcessError
 
-from dequindre.exceptions import CyclicGraphError
+from dequindre.exceptions import CyclicGraphError, EarlyAbortError
 
 
 __version__ = '0.9.1.dev0'
@@ -464,8 +464,18 @@ class Dequindre:
         return None
 
 
-    def run_tasks(self) -> None:
-        """Run all tasks on the DAG"""
+    def run_tasks(self, error_handling: str = 'soft') -> None:
+        """Run all tasks on the DAG.
+        
+        Args:
+            error_handling (str): Either 'soft' or 'hard'. 'hard' error 
+                handling will abort the schedule after the first error.
+        """
+        assert isinstance(error_handling, str), \
+            '`error_handling` must be a str'
+        assert error_handling in ('soft', 'hard'), \
+            "`error_handling` must be in ('soft', 'hard')"
+
         self.refresh_dag()  # refresh just in case
         priorities = self.get_schedules()
 
@@ -475,3 +485,5 @@ class Dequindre:
                     self.run_task(task)
                 except Exception as err:
                     print(err, flush=True)
+                    if error_handling == 'hard':
+                        raise EarlyAbortError()
