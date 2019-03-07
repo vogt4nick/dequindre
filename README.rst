@@ -30,25 +30,8 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
 ..     :alt: Count Open Issues
 ..     :target: https://pypi.org/project/dequindre/
 
-
-Vision: Simplify Workflow Automation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``dequindre`` aims to simplify workflow automation. It supports only the most
-essential features, in contrast to full-featured schedulers like Airflow.
-
-
-What is dequindre?
-~~~~~~~~~~~~~~~~~~
-
-``dequindre`` is a minimalist scheduler you can use to
-
-- quickly configure python workflows at home or at work
-- run dependent tasks in separate python environments
-- learn the fundamentals and best practices of scheduling workflows
-
-Why Use Dequindre?
-~~~~~~~~~~~~~~~~~~
+Why Dequindre?
+~~~~~~~~~~~~~~
 
 Dequindre Is Easy to Setup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -70,6 +53,7 @@ v1.10.2 has 444 pages of docs`_.
 .. _`fully documented`: https://dequindre.readthedocs.io/en/stable/
 .. _`Airflow v1.10.2 has 444 pages of docs`:
   https://media.readthedocs.org/pdf/airflow/1.10.2/airflow.pdf
+
 
 Your First Dequindre Schedule
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,6 +115,7 @@ commented files.
 
     # steep_tea.py
     print("I'm steeping tea...")
+
 
 Features
 ~~~~~~~~
