@@ -17,14 +17,14 @@ from dequindre import Task
 @contextmanager
 def common_task(loc_pattern: str, common_env: str = 'python'):
     """Create tasks with a common parent path and environment.
-    
-    Lots of tasks will use the same environment or same directory. These 
+
+    Lots of tasks will use the same environment or same directory. These
     `commons` reduce duplicate code.
 
     Args:
         loc_pattern (str): {}-formatted parent path.
         common_env (str, optional): environment.
-    
+
     Example:
         >>> from dequindre.commons import common_task
         >>> with common_task('./tea-tasks/{}/main.py') as T:
@@ -42,12 +42,12 @@ def common_task(loc_pattern: str, common_env: str = 'python'):
 
     def construct_task(loc: str):
         return Task(loc_pattern.format(loc), env=common_env)
-    
+
     yield construct_task
 
 
 @contextmanager
-def common_venv(common_prefix: str = '.', 
+def common_venv(common_prefix: str = '.',
                 common_suffix: str = None) \
                 -> Callable:
     """Quickly construct a path to a common virtualenv environment
@@ -60,7 +60,7 @@ def common_venv(common_prefix: str = '.',
 
     Returns:
         Function to shorten env specification
-    
+
     Example:
         >>> #doctest: +SKIP
         >>> from dequindre.commons import common_venv
@@ -77,7 +77,7 @@ def common_venv(common_prefix: str = '.',
 
 
 @contextmanager
-def common_pipenv(common_prefix: str = '.', 
+def common_pipenv(common_prefix: str = '.',
                   common_suffix: str = None) \
                   -> Callable:
     """Quickly construct a path to a common pipenv environment
@@ -90,7 +90,7 @@ def common_pipenv(common_prefix: str = '.',
 
     Returns:
         Function to shorten env specification
-    
+
     Example:
         >>> #doctest: +SKIP
         >>> from dequindre.commons import common_pipenv
@@ -107,7 +107,7 @@ def common_pipenv(common_prefix: str = '.',
 
 
 @contextmanager
-def common_conda_env(common_prefix: str, 
+def common_conda_env(common_prefix: str,
                      common_suffix: str = None) \
                      -> Callable:
     """Quickly construct a path to a common conda environment
@@ -120,7 +120,7 @@ def common_conda_env(common_prefix: str,
 
     Returns:
         Function to shorten env specification
-    
+
     Example:
         >>> #doctest: +SKIP
         >>> from dequindre.commons import common_conda_env

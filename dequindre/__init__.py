@@ -21,8 +21,8 @@ __version__ = '0.10.0.dev0'
 
 
 class Task:
-    """Define a Task and its relevant attributes. 
-    
+    """Define a Task and its relevant attributes.
+
     Note:
         Tasks with the same loc and env are equal.
 
@@ -80,21 +80,21 @@ class Task:
 
 
 class DAG:
-    """Define a DAG and relationships between tasks. 
-    
+    """Define a DAG and relationships between tasks.
+
     A DAG is a directed acyclic graph with tasks and dependencies as nodes
-    and directed edges respectively. You have the option to define all the 
+    and directed edges respectively. You have the option to define all the
     tasks and dependencies at once if you prefer that syntax.
 
     Note:
-        Not obviously, a DAG may contain more than one graph. Also not 
+        Not obviously, a DAG may contain more than one graph. Also not
         obviously, new Tasks defined by edges are automatically added to the
         set of tasks.
 
     Attributes:
-        tasks (`set` of `Task`): The set of all tasks. Dequindre will try to 
+        tasks (`set` of `Task`): The set of all tasks. Dequindre will try to
             run every task in this attribute.
-        _edges (`dict` of `Task`: `set` of `Task`): A dict of directed edges 
+        _edges (`dict` of `Task`: `set` of `Task`): A dict of directed edges
             from one Task to a set of Tasks. Access directly at your own peril.
     """
 
@@ -131,7 +131,7 @@ class DAG:
 
     def add_task(self, task: Task) -> None:
         """Add a task to the set of tasks
-        
+
         Args:
             task (`Task`): A Task object.
         """
@@ -143,7 +143,7 @@ class DAG:
 
     def add_tasks(self, tasks: set) -> None:
         """Add multiple tasks to the set of tasks.
-        
+
         Args:
             tasks (`set` of `Task`): Tasks to be added to the DAG.
         """
@@ -183,7 +183,7 @@ class DAG:
 
     def remove_tasks(self, tasks: set) -> None:
         """Remove multiple tasks from the set of tasks and any related edges
-        
+
         Args:
             tasks (`set` of `Task`): Tasks to be removed from the DAG.
         """
@@ -208,7 +208,7 @@ class DAG:
             depends_on (`Task`): The upstream task.
 
         Note:
-            If either task does not yet exist in DAG, the task will 
+            If either task does not yet exist in DAG, the task will
             automatically be added to the dag.
 
         Examples:
@@ -242,7 +242,7 @@ class DAG:
                 downstream Tasks to possibly many upstream tasks.
 
         Note:
-            If any tasks do not yet exist in DAG, the task will automatically 
+            If any tasks do not yet exist in DAG, the task will automatically
             be added to the dag.
 
         Examples:
@@ -265,12 +265,12 @@ class DAG:
     # ------------------------------------------------------------------------
     # Graph Utilities
     # ------------------------------------------------------------------------
-    # nested loops are easier to read here. If time-complexity becomes a 
+    # nested loops are easier to read here. If time-complexity becomes a
     # problem, the user clearly needs to use a full-featured scheduler
 
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks.
-        
+
         Returns:
             `dict` of `Task`: `set` of `Task`
         """
@@ -280,7 +280,7 @@ class DAG:
 
     def get_upstream(self) -> dict:
         """Return adjacency dict of upstream Tasks
-        
+
         Returns:
             `dict` of `Task`: `set` of `Task`
         """
@@ -324,7 +324,7 @@ class DAG:
 
     def _is_cyclic(self, task, visited, stack) -> bool:
         """Helper function for is_cyclic
-        
+
         Returns:
             True if cycle detected. False otherwise.
         """
@@ -345,7 +345,7 @@ class DAG:
 
     def is_cyclic(self) -> bool:
         """Detect if the DAG is cyclic.
-        
+
         Returns:
             True if cycle detected. False otherwise.
         """
@@ -449,9 +449,9 @@ class Dequindre:
 
 
     def run_task(self, task: Task) -> None:
-        """Run the python file defined by Task.loc in the environment defined 
+        """Run the python file defined by Task.loc in the environment defined
         by the Task.env
-        
+
         Args:
             task (`Task`): The task to be run.
         """
@@ -466,9 +466,9 @@ class Dequindre:
 
     def run_tasks(self, error_handling: str = 'soft') -> None:
         """Run all tasks on the DAG.
-        
+
         Args:
-            error_handling (str): Either 'soft' or 'hard'. 'hard' error 
+            error_handling (str): Either 'soft' or 'hard'. 'hard' error
                 handling will abort the schedule after the first error.
         """
         assert isinstance(error_handling, str), \
