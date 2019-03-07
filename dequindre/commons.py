@@ -35,10 +35,10 @@ def common_task(loc_pattern: str, common_env: str = 'python'):
         Task(./tea-tasks/boil_water/main.py)
     """
     assert isinstance(loc_pattern, str), '`loc_pattern` must be a str'
-    assert len(loc_pattern) > 0, '`loc_pattern` must not be an empty str'
+    assert loc_pattern, '`loc_pattern` must not be an empty str'
     assert '{' in loc_pattern and '}' in loc_pattern
     assert isinstance(common_env, str)
-    assert len(common_env) > 0, '`common_env` must not be an empty str'
+    assert common_env, '`common_env` must not be an empty str'
 
     def construct_task(loc: str):
         return Task(loc_pattern.format(loc), env=common_env)

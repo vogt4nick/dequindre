@@ -3,8 +3,7 @@
 """
 class CyclicGraphError(Exception):
     """Dequindre will generate an infinite schedule given a cyclic graph"""
-    pass
+
 
 class EarlyAbortError(Exception):
     """Used in conjunction with Dequindre.run_tasks() for error handling"""
-    pass

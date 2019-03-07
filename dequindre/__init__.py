@@ -38,14 +38,12 @@ class Task:
             env (str, optional): Which environment to run.
         """
         assert isinstance(loc, str), 'loc must be a str'
-        assert len(loc) > 0, 'loc cannot be an empty string'
+        assert loc, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
-        assert len(env) > 0, 'env cannot be an empty string'
+        assert env, 'env cannot be an empty string'
 
         self.loc = loc
         self.env = env
-
-        return None
 
 
     def __hash__(self):
@@ -61,6 +59,7 @@ class Task:
     def __eq__(self, other: 'Task') -> bool:
         if not isinstance(other, type(self)):
             return False
+
         return hash(self) == hash(other)
 
 
@@ -117,8 +116,6 @@ class DAG:
             assert isinstance(dependencies, dict), '`dependencies` must be a dict'
             self.add_dependencies(dependencies)
 
-        return None
-
 
     def __repr__(self):
         if self.tasks:
@@ -138,8 +135,6 @@ class DAG:
         assert isinstance(task, Task), TypeError('task is not a Task')
         self.tasks.add(task)
 
-        return None
-
 
     def add_tasks(self, tasks: set) -> None:
         """Add multiple tasks to the set of tasks.
@@ -157,8 +152,6 @@ class DAG:
 
         for t in tasks:
             self.add_task(t)
-
-        return None
 
 
     def remove_task(self, task: Task) -> None:
@@ -178,8 +171,6 @@ class DAG:
         if task in self._edges:
             del self._edges[task]
 
-        return None
-
 
     def remove_tasks(self, tasks: set) -> None:
         """Remove multiple tasks from the set of tasks and any related edges
@@ -197,8 +188,6 @@ class DAG:
 
         for t in tasks:
             self.remove_task(t)
-
-        return None
 
     def add_dependency(self, task: Task, depends_on: Task) -> None:
         """Add dependency to DAG.
@@ -230,8 +219,6 @@ class DAG:
             msg = f'Adding the dependency {depends_on} -> {task}' \
                   f'introduced a cycle'
             raise CyclicGraphError(msg)
-
-        return None
 
 
     def add_dependencies(self, d: Dict[Task, Set[Task]]) -> None:
@@ -274,8 +261,9 @@ class DAG:
         Returns:
             `dict` of `Task`: `set` of `Task`
         """
-        return defaultdict(set,
-            {k: v for k, v in self._edges.items() if len(v) > 0})
+        downstream = {k: v for k, v in self._edges.items() if len(v) > 0}
+
+        return defaultdict(set, downstream)
 
 
     def get_upstream(self) -> dict:
@@ -361,6 +349,7 @@ class DAG:
             if not visited[task]:
                 if self._is_cyclic(task, visited, stack):
                     return True
+
         return False
 
 
@@ -382,8 +371,6 @@ class Dequindre:
         self.original_dag = dag
         self.refresh_dag()
 
-        return None
-
 
     def __repr__(self):
         return f"{Dequindre.__qualname__}({self.dag})"
@@ -392,8 +379,6 @@ class Dequindre:
     def refresh_dag(self) -> None:
         """Create a deepcopy of the original_dag."""
         self.dag = deepcopy(self.original_dag)
-
-        return None
 
 
     def get_task_schedules(self) -> Dict[Task, int]:
@@ -459,9 +444,7 @@ class Dequindre:
             ValueError(f'{task} is not in the dag')
 
         print(f'\nRunning {repr(task)}\n', flush=True)
-        r = subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
-
-        return None
+        subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
 
 
     def run_tasks(self, error_handling: str = 'soft') -> None:
@@ -479,7 +462,7 @@ class Dequindre:
         self.refresh_dag()  # refresh just in case
         priorities = self.get_schedules()
 
-        for k, tasks in priorities.items():
+        for _, tasks in priorities.items():
             for task in tasks:
                 try:
                     self.run_task(task)
