@@ -30,12 +30,9 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
 ..     :alt: Count Open Issues
 ..     :target: https://pypi.org/project/dequindre/
 
-Why Dequindre?
-~~~~~~~~~~~~~~
-
 Dequindre Is Easy to Setup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you can `pip install`, you can `pip install dequindre`. Dequindre is
+If you can ``pip install``, you can ``pip install dequindre``. Dequindre is
 written in pure python and is OS independent.
 
 Dequindre Is Easy to Run
