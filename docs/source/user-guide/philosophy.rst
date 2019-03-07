@@ -9,13 +9,13 @@ scheduler.
 Inspired by the complexity of Airflow, Dequindre leans heavilty on three
 lines of the Zen of Python:
 
-1. Explicit is better than implicit.
-2. Simple is better than complex.
-3. Readability counts.
+1. Explicit is better than implicit
+2. Simple is better than complex
+3. Readability counts
 
 From this starting point, Dequindre offers
 
--  Minimal abstraction;
+-  Minimal abstraction
 -  No Python dependencies; no third-party bugs
 -  Single-container deployment
 -  Legible source code; fewer than 1000 lines
