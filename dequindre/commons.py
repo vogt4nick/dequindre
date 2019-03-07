@@ -15,40 +15,39 @@ from dequindre import Task
 
 
 @contextmanager
-def common_task(common_loc: str, common_env: str = 'python'):
+def common_task(loc_pattern: str, common_env: str = 'python'):
     """Create tasks with a common parent path and environment.
-    
-    Lots of tasks will use the same environment or same directory. These 
+
+    Lots of tasks will use the same environment or same directory. These
     `commons` reduce duplicate code.
 
     Args:
-        common_loc (str): {}-formatted parent path.
+        loc_pattern (str): {}-formatted parent path.
         common_env (str, optional): environment.
-    
+
     Example:
         >>> from dequindre.commons import common_task
         >>> with common_task('./tea-tasks/{}/main.py') as T:
         ...     boil_water = T('boil_water')
         ...     steep_tea  = T('steep_tea')
         ...     drink_tea  = T('drink_tea')
-        ...
         >>> boil_water
-        Task('./tea-tasks/boil_water/main.py')
+        Task(./tea-tasks/boil_water/main.py)
     """
-    assert isinstance(common_loc, str), '`common_loc` must be a str'
-    assert len(common_loc) > 0, '`common_loc` must not be an empty str'
-    assert '{' in common_loc and '}' in common_loc
+    assert isinstance(loc_pattern, str), '`loc_pattern` must be a str'
+    assert loc_pattern, '`loc_pattern` must not be an empty str'
+    assert '{' in loc_pattern and '}' in loc_pattern
     assert isinstance(common_env, str)
-    assert len(common_env) > 0, '`common_env` must not be an empty str'
+    assert common_env, '`common_env` must not be an empty str'
 
     def construct_task(loc: str):
-        return Task(common_loc.format(loc), env=common_env)
-    
+        return Task(loc_pattern.format(loc), env=common_env)
+
     yield construct_task
 
 
 @contextmanager
-def common_venv(common_prefix: str = '.', 
+def common_venv(common_prefix: str = '.',
                 common_suffix: str = None) \
                 -> Callable:
     """Quickly construct a path to a common virtualenv environment
@@ -61,8 +60,9 @@ def common_venv(common_prefix: str = '.',
 
     Returns:
         Function to shorten env specification
-    
+
     Example:
+        >>> #doctest: +SKIP
         >>> from dequindre.commons import common_venv
         >>> with common_venv('./tea-envs') as env:
         ...     python27 = env('python27')
@@ -77,7 +77,7 @@ def common_venv(common_prefix: str = '.',
 
 
 @contextmanager
-def common_pipenv(common_prefix: str = '.', 
+def common_pipenv(common_prefix: str = '.',
                   common_suffix: str = None) \
                   -> Callable:
     """Quickly construct a path to a common pipenv environment
@@ -90,8 +90,9 @@ def common_pipenv(common_prefix: str = '.',
 
     Returns:
         Function to shorten env specification
-    
+
     Example:
+        >>> #doctest: +SKIP
         >>> from dequindre.commons import common_pipenv
         >>> with common_pipenv('/path/to/tea-envs') as env:
         ...     python27 = env('python27')
@@ -106,7 +107,7 @@ def common_pipenv(common_prefix: str = '.',
 
 
 @contextmanager
-def common_conda_env(common_prefix: str, 
+def common_conda_env(common_prefix: str,
                      common_suffix: str = None) \
                      -> Callable:
     """Quickly construct a path to a common conda environment
@@ -119,8 +120,9 @@ def common_conda_env(common_prefix: str,
 
     Returns:
         Function to shorten env specification
-    
+
     Example:
+        >>> #doctest: +SKIP
         >>> from dequindre.commons import common_conda_env
         >>> with common_conda_env('/path/to/conda/envs') as env:
         ...     python27 = env('python27')
@@ -132,4 +134,3 @@ def common_conda_env(common_prefix: str,
     if common_suffix is None:
         common_suffix = pathjoin('bin', 'python')
     yield lambda s: pathjoin(common_prefix, s, common_suffix)
-

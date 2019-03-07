@@ -2,7 +2,8 @@
 """Exceptions that are unique to dequindre.
 """
 class CyclicGraphError(Exception):
-    pass
+    """Dequindre will generate an infinite schedule given a cyclic graph"""
+
 
 class EarlyAbortError(Exception):
-    pass
+    """Used in conjunction with Dequindre.run_tasks() for error handling"""

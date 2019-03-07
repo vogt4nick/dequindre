@@ -17,12 +17,12 @@ from subprocess import check_output, CalledProcessError
 from dequindre.exceptions import CyclicGraphError, EarlyAbortError
 
 
-__version__ = '0.10.0.dev0'
+__version__ = '0.10.0.dev1'
 
 
 class Task:
-    """Define a Task and its relevant attributes. 
-    
+    """Define a Task and its relevant attributes.
+
     Note:
         Tasks with the same loc and env are equal.
 
@@ -38,14 +38,12 @@ class Task:
             env (str, optional): Which environment to run.
         """
         assert isinstance(loc, str), 'loc must be a str'
-        assert len(loc) > 0, 'loc cannot be an empty string'
+        assert loc, 'loc cannot be an empty string'
         assert isinstance(env, str), 'env must be a str'
-        assert len(env) > 0, 'env cannot be an empty string'
+        assert env, 'env cannot be an empty string'
 
         self.loc = loc
         self.env = env
-
-        return None
 
 
     def __hash__(self):
@@ -61,6 +59,7 @@ class Task:
     def __eq__(self, other: 'Task') -> bool:
         if not isinstance(other, type(self)):
             return False
+
         return hash(self) == hash(other)
 
 
@@ -80,21 +79,21 @@ class Task:
 
 
 class DAG:
-    """Define a DAG and relationships between tasks. 
-    
+    """Define a DAG and relationships between tasks.
+
     A DAG is a directed acyclic graph with tasks and dependencies as nodes
-    and directed edges respectively. You have the option to define all the 
+    and directed edges respectively. You have the option to define all the
     tasks and dependencies at once if you prefer that syntax.
 
     Note:
-        Not obviously, a DAG may contain more than one graph. Also not 
+        Not obviously, a DAG may contain more than one graph. Also not
         obviously, new Tasks defined by edges are automatically added to the
         set of tasks.
 
     Attributes:
-        tasks (`set` of `Task`): The set of all tasks. Dequindre will try to 
+        tasks (`set` of `Task`): The set of all tasks. Dequindre will try to
             run every task in this attribute.
-        _edges (`dict` of `Task`: `set` of `Task`): A dict of directed edges 
+        _edges (`dict` of `Task`: `set` of `Task`): A dict of directed edges
             from one Task to a set of Tasks. Access directly at your own peril.
     """
 
@@ -117,8 +116,6 @@ class DAG:
             assert isinstance(dependencies, dict), '`dependencies` must be a dict'
             self.add_dependencies(dependencies)
 
-        return None
-
 
     def __repr__(self):
         if self.tasks:
@@ -131,19 +128,17 @@ class DAG:
 
     def add_task(self, task: Task) -> None:
         """Add a task to the set of tasks
-        
+
         Args:
             task (`Task`): A Task object.
         """
         assert isinstance(task, Task), TypeError('task is not a Task')
         self.tasks.add(task)
 
-        return None
-
 
     def add_tasks(self, tasks: set) -> None:
         """Add multiple tasks to the set of tasks.
-        
+
         Args:
             tasks (`set` of `Task`): Tasks to be added to the DAG.
         """
@@ -157,8 +152,6 @@ class DAG:
 
         for t in tasks:
             self.add_task(t)
-
-        return None
 
 
     def remove_task(self, task: Task) -> None:
@@ -178,12 +171,10 @@ class DAG:
         if task in self._edges:
             del self._edges[task]
 
-        return None
-
 
     def remove_tasks(self, tasks: set) -> None:
         """Remove multiple tasks from the set of tasks and any related edges
-        
+
         Args:
             tasks (`set` of `Task`): Tasks to be removed from the DAG.
         """
@@ -198,8 +189,6 @@ class DAG:
         for t in tasks:
             self.remove_task(t)
 
-        return None
-
     def add_dependency(self, task: Task, depends_on: Task) -> None:
         """Add dependency to DAG.
 
@@ -208,7 +197,7 @@ class DAG:
             depends_on (`Task`): The upstream task.
 
         Note:
-            If either task does not yet exist in DAG, the task will 
+            If either task does not yet exist in DAG, the task will
             automatically be added to the dag.
 
         Examples:
@@ -231,8 +220,6 @@ class DAG:
                   f'introduced a cycle'
             raise CyclicGraphError(msg)
 
-        return None
-
 
     def add_dependencies(self, d: Dict[Task, Set[Task]]) -> None:
         """Add multiple dependencies to DAG
@@ -242,7 +229,7 @@ class DAG:
                 downstream Tasks to possibly many upstream tasks.
 
         Note:
-            If any tasks do not yet exist in DAG, the task will automatically 
+            If any tasks do not yet exist in DAG, the task will automatically
             be added to the dag.
 
         Examples:
@@ -265,22 +252,23 @@ class DAG:
     # ------------------------------------------------------------------------
     # Graph Utilities
     # ------------------------------------------------------------------------
-    # nested loops are easier to read here. If time-complexity becomes a 
+    # nested loops are easier to read here. If time-complexity becomes a
     # problem, the user clearly needs to use a full-featured scheduler
 
     def get_downstream(self) -> dict:
         """Return adjacency dict of downstream Tasks.
-        
+
         Returns:
             `dict` of `Task`: `set` of `Task`
         """
-        return defaultdict(set,
-            {k: v for k, v in self._edges.items() if len(v) > 0})
+        downstream = {k: v for k, v in self._edges.items() if len(v) > 0}
+
+        return defaultdict(set, downstream)
 
 
     def get_upstream(self) -> dict:
         """Return adjacency dict of upstream Tasks
-        
+
         Returns:
             `dict` of `Task`: `set` of `Task`
         """
@@ -324,7 +312,7 @@ class DAG:
 
     def _is_cyclic(self, task, visited, stack) -> bool:
         """Helper function for is_cyclic
-        
+
         Returns:
             True if cycle detected. False otherwise.
         """
@@ -345,7 +333,7 @@ class DAG:
 
     def is_cyclic(self) -> bool:
         """Detect if the DAG is cyclic.
-        
+
         Returns:
             True if cycle detected. False otherwise.
         """
@@ -361,6 +349,7 @@ class DAG:
             if not visited[task]:
                 if self._is_cyclic(task, visited, stack):
                     return True
+
         return False
 
 
@@ -382,8 +371,6 @@ class Dequindre:
         self.original_dag = dag
         self.refresh_dag()
 
-        return None
-
 
     def __repr__(self):
         return f"{Dequindre.__qualname__}({self.dag})"
@@ -392,8 +379,6 @@ class Dequindre:
     def refresh_dag(self) -> None:
         """Create a deepcopy of the original_dag."""
         self.dag = deepcopy(self.original_dag)
-
-        return None
 
 
     def get_task_schedules(self) -> Dict[Task, int]:
@@ -449,9 +434,9 @@ class Dequindre:
 
 
     def run_task(self, task: Task) -> None:
-        """Run the python file defined by Task.loc in the environment defined 
+        """Run the python file defined by Task.loc in the environment defined
         by the Task.env
-        
+
         Args:
             task (`Task`): The task to be run.
         """
@@ -459,16 +444,14 @@ class Dequindre:
             ValueError(f'{task} is not in the dag')
 
         print(f'\nRunning {repr(task)}\n', flush=True)
-        r = subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
-
-        return None
+        subprocess_run(f'{task.env} {task.loc}', shell=True, check=True)
 
 
     def run_tasks(self, error_handling: str = 'soft') -> None:
         """Run all tasks on the DAG.
-        
+
         Args:
-            error_handling (str): Either 'soft' or 'hard'. 'hard' error 
+            error_handling (str): Either 'soft' or 'hard'. 'hard' error
                 handling will abort the schedule after the first error.
         """
         assert isinstance(error_handling, str), \
@@ -479,7 +462,7 @@ class Dequindre:
         self.refresh_dag()  # refresh just in case
         priorities = self.get_schedules()
 
-        for k, tasks in priorities.items():
+        for _, tasks in priorities.items():
             for task in tasks:
                 try:
                     self.run_task(task)

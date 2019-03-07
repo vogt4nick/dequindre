@@ -65,4 +65,3 @@ def test__conda_shortcut():
         returned_path = conda_env(env_name)
 
     assert returned_path == correct_path
-

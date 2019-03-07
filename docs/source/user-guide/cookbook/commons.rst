@@ -15,9 +15,9 @@ Common Tasks
     >>> from dequindre.commons import common_task
 
     >>> common_prefix = '/long/path/to/tea-tasks'
-    >>> with common_task(common_prefix) as TeaTask:
-    ...     pour_tea = TeaTask(loc='pour_tea.py')
-    ...     drink_tea = TeaTask(loc='drink_tea.py')
+    >>> with common_task(common_prefix) as T:
+    ...     pour_tea = T(loc='pour_tea.py')
+    ...     drink_tea = T(loc='drink_tea.py')
     ... 
     >>> pour_tea
     Task(/long/path/to/tea-tasks/pour_tea.py)
@@ -40,9 +40,9 @@ many users.
     >>> from dequindre.commons import common_venv
 
     >>> common_prefix = '/my/very/long/path'
-    >>> with common_venv(common_prefix) as venv:
-    ...     tea_env = venv('tea-env')
-    ...     biscuit_env = venv('biscuit-env')
+    >>> with common_venv(common_prefix) as E:
+    ...     tea_env = E('tea-env')
+    ...     biscuit_env = E('biscuit-env')
     ... 
     >>> tea_env
     '/my/very/long/path/tea-env/bin/python'

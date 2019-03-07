@@ -27,7 +27,7 @@ author = 'Nick Vogt'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.10.0.dev0'
+release = '0.10.0.dev1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -41,6 +41,7 @@ release = '0.10.0.dev0'
 # ones.
 extensions = [
     'sphinx.ext.napoleon',
+    'sphinx.ext.doctest'
 ] 
 napoleon_google_docstring = True
 napoleon_use_param = False
