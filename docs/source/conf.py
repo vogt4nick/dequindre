@@ -41,6 +41,7 @@ release = '0.10.0.dev0'
 # ones.
 extensions = [
     'sphinx.ext.napoleon',
+    'sphinx.ext.doctest'
 ] 
 napoleon_google_docstring = True
 napoleon_use_param = False
