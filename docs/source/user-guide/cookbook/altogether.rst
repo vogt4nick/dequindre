@@ -1,5 +1,10 @@
 Bringing It All Together
-========================
+------------------------
+
+After reviewing the cook book so far, we're ready to write an optimized 
+Dequindre schedule. This works as a good reference when you're building 
+your first schedules. 
+
 
 .. code-block:: python
 

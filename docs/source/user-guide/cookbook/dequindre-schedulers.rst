@@ -39,3 +39,15 @@ scheduler.
     Running Task(./pour_tea.py)
 
     I am pouring tea...
+
+
+Error Handling
+~~~~~~~~~~~~~~
+
+By default, Dequindre uses soft error handling; if one task fails, Dequindre 
+assumes it's a non-critical error and continues on. But we don't always want 
+this behavior. Instead, if one task fails, we want the whole schedule to fail.
+
+``Dequindre.run_tasks()`` has an optional ``error_handling`` method that takes
+one of two values: ``error_handling='soft'`` or ``error_handling='hard'``. The
+latter will raise an ``EarlyAbortError`` if any of the tasks fail. 
