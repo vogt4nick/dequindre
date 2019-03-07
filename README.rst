@@ -42,11 +42,11 @@ data scientists and data engineers.
 What is dequindre?
 ~~~~~~~~~~~~~~~~~~
 
-``dequindre`` is a minimalist scheduler you can use to:
+``dequindre`` is a minimalist scheduler you can use to
 
-- quickly configure python workflows at home or at work,
-- run dependent tasks in separate python environments, and
-- learn the fundamentals and best practices of scheduling workflows.
+- quickly configure python workflows at home or at work
+- run dependent tasks in separate python environments
+- learn the fundamentals and best practices of scheduling workflows
 
 
 Features
