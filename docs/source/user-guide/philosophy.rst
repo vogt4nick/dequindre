@@ -1,8 +1,8 @@
 Philosophy
 ==========
 
-Dequindre is built for amateurs and professionals with the most basic 
-use-cases in mind. It also functions as a learning tool for those without
+Dequindre is built for amateurs and professionals with the most essential 
+features in mind. It also functions as a learning tool for those without
 the time or resources to setup the requisite architecture for a full-featured 
 scheduler.
 
