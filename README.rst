@@ -31,19 +31,18 @@ Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
 ..     :target: https://pypi.org/project/dequindre/
 
 Dequindre Is Easy to Setup
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you can ``pip install``, you can ``pip install dequindre``. Dequindre is
-written in pure python and is OS independent.
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Anywhere Python goes, Dequindre can follow. Dequindre is written in pure 
+python and is OS independent. All you need is to ``pip install dequindre``.
 
 Dequindre Is Easy to Run
-^^^^^^^^^^^^^^^^^^^^^^^^
-If you can run Python, you can run Dequindre. Users with virtual environments
-can use Dequindre too. Dequindre is compatible with virtualenv, pipenv, and
-conda environments.
+~~~~~~~~~~~~~~~~~~~~~~~~
+Dequindre makes it easy to run virtual environments. Dequindre supports 
+virtualenv, pipenv, and conda environments.
 
 Dequindre Is Easy to Learn
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-You can implement your first Dequindre workflow in minutes. Dequindre is less
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+You can run your first Dequindre workflow in minutes. Dequindre is less
 than 1000 lines of Python and `fully documented`_. In contrast, `Airflow
 v1.10.2 has 444 pages of docs`_.
 
@@ -54,8 +53,7 @@ v1.10.2 has 444 pages of docs`_.
 
 Your First Dequindre Schedule
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Install dequindre from PyPI ``pip install dequindre``. Then in the REPL or in
-a ``schedule.py`` file,
+Install dequindre from PyPI ``pip install dequindre``. Then in the REPL,
 
 .. code-block:: python
 
@@ -72,7 +70,7 @@ a ``schedule.py`` file,
     ...     drink_tea: steep_tea
     ... })
 
-    >>> ## run tasks
+    >>> ## create schedules
     >>> dq = Dequindre(make_tea)
     >>> dq.get_schedules()
     defaultdict(<class 'set'>, {
@@ -80,7 +78,8 @@ a ``schedule.py`` file,
         2: {Task(./steep_tea.py)},
         3: {Task(./drink_tea.py)}})
 
-    >>> ## dq.run_tasks() can run the files if they exist.
+    >>> ## run tasks if the files exist.
+    >>> dq.run_tasks()
     Running Task(./boil_water.py)
 
     I am boiling water...
@@ -118,12 +117,13 @@ Features
 ~~~~~~~~
 
 - **Automated workflow scheduling**
-- **Pure Python**: Relies entirely on Python built-ins
-    - This reduces bugs, complexity, and prevents dependency hell
+- **Pure Python**: Relies entirely on Python built-ins to reduce bugs and 
+  complexity
 - **Cross-Python compatible**: Supports Python 2 and Python 3
 - **Cross-platform**: Windows and Unix style OS environments
 - **Run your Python tasks in any pre-defined environments**
-    - dequindre facilitates **virtualenv**, **conda**, and **pipenv** environments
+    - dequindre facilitates **virtualenv**, **conda**, and **pipenv** 
+      environments
 - **Supports dynamic workflow configuration** also seen in Airflow
 - **Documented** examples and configuration
 
