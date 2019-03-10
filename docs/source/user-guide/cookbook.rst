@@ -12,6 +12,6 @@ Cookbook
 
 .. include:: ./cookbook/dequindre-workflows.rst
 
-.. include:: ./cookbook/schedule-dequindre.rst
+.. include:: ./cookbook/scheduling.rst
 
 .. include:: ./cookbook/altogether.rst
