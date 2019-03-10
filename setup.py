@@ -8,7 +8,7 @@ with open('./dequindre/__init__.py', 'r') as ifile:
 setup(
     name='dequindre',
     version=version['__version__'],
-    description="Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.",
+    description="Dequindre /de-KWIN-der/ (n.): A minimalist workflow manager.",
     long_description=open('readme.rst').read(),
     long_description_content_type="text/x-rst",
     url='https://github.com/vogt4nick/dequindre',

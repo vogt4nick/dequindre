@@ -1,6 +1,6 @@
-=====================================================
-Dequindre /de-KWIN-der/ (n.): A minimalist scheduler.
-=====================================================
+============================================================
+Dequindre /de-KWIN-der/ (n.): A minimalist workflow manager.
+============================================================
 
 .. image:: https://img.shields.io/pypi/pyversions/dequindre.svg
     :alt: Supported Versions
