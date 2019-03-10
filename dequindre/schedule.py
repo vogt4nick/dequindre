@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Python job scheduling for humans.
 
-Forked from github.com/dbader/schedule/tree/0.6.0
+Forked from github.com/dbader/schedule/tree/0.6.0.
 
 An in-process scheduler for periodic jobs that uses the builder pattern
 for configuration. Schedule lets you run Python functions (or any other
@@ -11,14 +11,8 @@ human-friendly syntax.
 Inspired by Addam Wiggins' article "Rethinking Cron" [1] and the
 "clockwork" Ruby module [2][3].
 
-Features:
-    - A simple to use API for scheduling jobs.
-    - Very lightweight and no external dependencies.
-    - Excellent test coverage.
-    - Tested on Python 2.7, 3.5 and 3.6
-
 Usage:
-    >>> import schedule
+    >>> from dequindre import schedule
     >>> import time
 
     >>> def job(message='stuff'):
@@ -73,6 +67,7 @@ class Scheduler(object):
     def __init__(self):
         self.jobs = []
 
+
     def run_pending(self):
         """
         Run all jobs that are scheduled to run.
@@ -86,6 +81,7 @@ class Scheduler(object):
         runnable_jobs = (job for job in self.jobs if job.should_run)
         for job in sorted(runnable_jobs):
             self._run_job(job)
+
 
     def run_all(self, delay_seconds=0):
         """
@@ -103,6 +99,7 @@ class Scheduler(object):
             self._run_job(job)
             time.sleep(delay_seconds)
 
+
     def clear(self, tag=None):
         """
         Deletes scheduled jobs marked with the given tag, or all jobs
@@ -116,6 +113,7 @@ class Scheduler(object):
         else:
             self.jobs[:] = (job for job in self.jobs if tag not in job.tags)
 
+
     def cancel_job(self, job):
         """
         Delete a scheduled job.
@@ -127,6 +125,7 @@ class Scheduler(object):
         except ValueError:
             pass
 
+
     def every(self, interval=1):
         """
         Schedule a new periodic job.
@@ -137,10 +136,12 @@ class Scheduler(object):
         job = Job(interval, self)
         return job
 
+
     def _run_job(self, job):
         ret = job.run()
         if isinstance(ret, CancelJob) or ret is CancelJob:
             self.cancel_job(job)
+
 
     @property
     def next_run(self):
@@ -152,6 +153,7 @@ class Scheduler(object):
         if not self.jobs:
             return None
         return min(self.jobs).next_run
+
 
     @property
     def idle_seconds(self):
@@ -192,12 +194,14 @@ class Job(object):
         self.tags = set()  # unique set of tags for the job
         self.scheduler = scheduler  # scheduler to register with
 
+
     def __lt__(self, other):
         """
         PeriodicJobs are sortable based on the scheduled time they
         run next.
         """
         return self.next_run < other.next_run
+
 
     def __repr__(self):
         def format_time(t):
@@ -235,16 +239,19 @@ class Job(object):
                 timestats=timestats
             )
 
+
     @property
     def second(self):
         if self.interval != 1:
             raise IntervalError('Use seconds instead of second')
         return self.seconds
 
+
     @property
     def seconds(self):
         self.unit = 'seconds'
         return self
+
 
     @property
     def minute(self):
@@ -252,10 +259,12 @@ class Job(object):
             raise IntervalError('Use minutes instead of minute')
         return self.minutes
 
+
     @property
     def minutes(self):
         self.unit = 'minutes'
         return self
+
 
     @property
     def hour(self):
@@ -263,10 +272,12 @@ class Job(object):
             raise IntervalError('Use hours instead of hour')
         return self.hours
 
+
     @property
     def hours(self):
         self.unit = 'hours'
         return self
+
 
     @property
     def day(self):
@@ -274,10 +285,12 @@ class Job(object):
             raise IntervalError('Use days instead of day')
         return self.days
 
+
     @property
     def days(self):
         self.unit = 'days'
         return self
+
 
     @property
     def week(self):
@@ -285,10 +298,12 @@ class Job(object):
             raise IntervalError('Use weeks instead of week')
         return self.weeks
 
+
     @property
     def weeks(self):
         self.unit = 'weeks'
         return self
+
 
     @property
     def monday(self):
@@ -297,12 +312,14 @@ class Job(object):
         self.start_day = 'monday'
         return self.weeks
 
+
     @property
     def tuesday(self):
         if self.interval != 1:
             raise IntervalError('Use tuesdays instead of tuesday')
         self.start_day = 'tuesday'
         return self.weeks
+
 
     @property
     def wednesday(self):
@@ -311,12 +328,14 @@ class Job(object):
         self.start_day = 'wednesday'
         return self.weeks
 
+
     @property
     def thursday(self):
         if self.interval != 1:
             raise IntervalError('Use thursdays instead of thursday')
         self.start_day = 'thursday'
         return self.weeks
+
 
     @property
     def friday(self):
@@ -325,6 +344,7 @@ class Job(object):
         self.start_day = 'friday'
         return self.weeks
 
+
     @property
     def saturday(self):
         if self.interval != 1:
@@ -332,12 +352,14 @@ class Job(object):
         self.start_day = 'saturday'
         return self.weeks
 
+
     @property
     def sunday(self):
         if self.interval != 1:
             raise IntervalError('Use sundays instead of sunday')
         self.start_day = 'sunday'
         return self.weeks
+
 
     def tag(self, *tags):
         """
@@ -352,6 +374,7 @@ class Job(object):
             raise TypeError('Tags must be hashable')
         self.tags.update(tags)
         return self
+
 
     def at(self, time_str):
         """
@@ -405,6 +428,7 @@ class Job(object):
         self.at_time = datetime.time(hour, minute, second)
         return self
 
+
     def to(self, latest):
         """
         Schedule the job to run at an irregular (randomized) interval.
@@ -419,6 +443,7 @@ class Job(object):
         """
         self.latest = latest
         return self
+
 
     def do(self, job_func, *args, **kwargs):
         """
@@ -443,12 +468,14 @@ class Job(object):
         self.scheduler.jobs.append(self)
         return self
 
+
     @property
     def should_run(self):
         """
         :return: ``True`` if the job should be run now.
         """
         return datetime.datetime.now() >= self.next_run
+
 
     def run(self):
         """
@@ -461,6 +488,7 @@ class Job(object):
         self.last_run = datetime.datetime.now()
         self._schedule_next_run()
         return ret
+
 
     def _schedule_next_run(self):
         """
