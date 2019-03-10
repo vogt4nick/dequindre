@@ -1,8 +1,11 @@
 
+import time
+
 import pytest
 
 from dequindre import Task, DAG, Dequindre
 from dequindre.commons import common_task
+from dequindre import schedule
 
 
 def test__readme_example():
@@ -55,6 +58,14 @@ def test__common_task_example():
     dq.run_tasks()
 
 
+def test__schedule_example():
+    stoptime = time.time() + 1
+    schedule.every(0.5).seconds.do(test__readme_example)
+    while time.time() < stoptime:
+        schedule.run_pending()
+
+
 if __name__ == '__main__':
     test__readme_example()
     test__common_task_example()
+    test__schedule_example()
