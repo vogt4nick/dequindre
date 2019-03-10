@@ -17,7 +17,7 @@ from subprocess import check_output, CalledProcessError
 from dequindre.exceptions import CyclicGraphError, EarlyAbortError
 
 
-__version__ = '0.10.0'
+__version__ = '0.11.0.dev0'
 
 
 class Task:
