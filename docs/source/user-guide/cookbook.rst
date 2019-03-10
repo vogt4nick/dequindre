@@ -10,6 +10,8 @@ Cookbook
 
 .. include:: ./cookbook/dags.rst
 
-.. include:: ./cookbook/dequindre-schedulers.rst
+.. include:: ./cookbook/dequindre-workflows.rst
+
+.. include:: ./cookbook/schedule-dequindre.rst
 
 .. include:: ./cookbook/altogether.rst

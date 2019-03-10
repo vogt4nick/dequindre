@@ -1,5 +1,5 @@
-Dequindre Schedulers
---------------------
+Dequindre Workflows
+-------------------
 
 The Dequindre scheduler is the last major object in dequindre. After defining 
 your tasks and task dependencies in the DAG, you can create a Dequindre 
